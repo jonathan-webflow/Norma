@@ -120,6 +120,12 @@
   /* ── Max Width ──────────────────────────────────────────────────────────── */
   --max-width-container: 88.5rem;
   --max-width-page:      94.5rem;
+
+  /* ── Spacing fluido (Fluid Design) ──────────────────────────────────────── */
+  /* Geram utilities: px-gutter, py-section, gap-flow, etc. Tudo em rem.        */
+  --spacing-gutter:  clamp(1.25rem, 0.45rem + 3.6vw, 3rem);   /* padding lateral 20→48px */
+  --spacing-section: clamp(3.5rem, 1.7rem + 7.5vw, 7.5rem);   /* py de seção 56→120px     */
+  --spacing-flow:    clamp(2.5rem, 1.3rem + 5vw, 5rem);       /* ritmo vertical 40→80px   */
 }
 
 /* ─── Variáveis de layout (não geram utilities Tailwind) ────────────────── */
