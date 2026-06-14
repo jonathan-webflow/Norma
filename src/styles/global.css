@@ -1,0 +1,217 @@
+@import 'tailwindcss';
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/*  @theme: gera utility classes automaticamente a partir das CSS variables.   */
+/*  Ex: --color-canvas → bg-canvas, text-canvas, border-canvas, ring-canvas   */
+/*      --font-display → font-display                                          */
+/*      --text-display-1 → text-display-1 (font-size + line-height + tracking) */
+/* ─────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* ── Cores ─────────────────────────────────────────────────────────────── */
+  --color-canvas:       #fcfcf6;
+  --color-surface:      #edede8;
+
+  --color-ink:          #231f23;
+  --color-ink-muted:    #5d5d5d;
+  --color-ink-faint:    rgba(35, 31, 35, 0.08);
+  --color-ink-inverse:  #fcfcf6;
+
+  --color-brand:        #28492d;
+  --color-brand-dark:   #231f23;
+  --color-brand-light:  #fcfcf6;
+
+  --color-coral:        #ed7472;
+  --color-gold:         #f7d047;   /* brand mark / dots */
+
+  --color-border:       #e0e0e0;
+  --color-border-faint: rgba(35, 31, 35, 0.08);
+
+  /* ── Fontes ─────────────────────────────────────────────────────────────── */
+  --font-display: 'Stack Sans Headline', system-ui, sans-serif;
+  --font-sans:    'Inter', system-ui, sans-serif;
+
+  /* ── Tipografia Fluida ──────────────────────────────────────────────────── */
+  /* Todos os min/max em rem → escala com zoom do usuário (WCAG 1.4.4)         */
+  /* Valor central em rem + vw → fluido entre mobile (375px) e desktop (1512px) */
+
+  /* H1 — 32px (mobile) → 64px (desktop) */
+  --text-display-1:                 clamp(2rem, 1.34rem + 2.82vw, 4rem);
+  --text-display-1--line-height:    1.0625;
+  --text-display-1--letter-spacing: -0.015625em;
+  --text-display-1--font-weight:    300;
+
+  /* H2 — 28px (mobile) → 48px (desktop) */
+  --text-display-2:                 clamp(1.75rem, 1.34rem + 1.76vw, 3rem);
+  --text-display-2--line-height:    1.4;
+  --text-display-2--letter-spacing: -0.01em;
+  --text-display-2--font-weight:    400;
+
+  /* H3 — 22px (mobile) → 32px (desktop) */
+  --text-heading-3:                 clamp(1.375rem, 1.17rem + 0.88vw, 2rem);
+  --text-heading-3--line-height:    1.3;
+  --text-heading-3--letter-spacing: -0.005em;
+  --text-heading-3--font-weight:    400;
+
+  /* H4 — 18px (mobile) → 24px (desktop) */
+  --text-heading-4:                 clamp(1.125rem, 1rem + 0.53vw, 1.5rem);
+  --text-heading-4--line-height:    1.35;
+  --text-heading-4--letter-spacing: 0em;
+  --text-heading-4--font-weight:    400;
+
+  /* H5 — 20px fixo */
+  --text-heading-5:                 1.25rem;
+  --text-heading-5--line-height:    1.4;
+  --text-heading-5--letter-spacing: -0.02em;
+  --text-heading-5--font-weight:    400;
+
+  /* H6 — 16px fixo */
+  --text-heading-6:                 1rem;
+  --text-heading-6--line-height:    1.5;
+  --text-heading-6--letter-spacing: 0.02em;
+  --text-heading-6--font-weight:    400;
+
+  /* Label / Overline — 12px fixo */
+  --text-label:                     0.75rem;
+  --text-label--line-height:        1.333;
+  --text-label--letter-spacing:     0.02em;
+  --text-label--font-weight:        400;
+
+  /* Body Lead — 20px fixo */
+  --text-body-xl:                   1.25rem;
+  --text-body-xl--line-height:      1.4;
+  --text-body-xl--font-weight:      500;
+
+  /* Body Base — 16px fixo */
+  --text-body-base:                 1rem;
+  --text-body-base--line-height:    1.625;
+  --text-body-base--font-weight:    400;
+
+  /* Body Small — 14px fixo */
+  --text-body-sm:                   0.875rem;
+  --text-body-sm--line-height:      1.625;
+  --text-body-sm--font-weight:      400;
+
+  /* ── Espaçamento (base 8px = 0.5rem, escala em rem) ────────────────────── */
+  --spacing-1:  0.25rem;
+  --spacing-2:  0.5rem;
+  --spacing-3:  0.75rem;
+  --spacing-4:  1rem;
+  --spacing-5:  1.25rem;
+  --spacing-6:  1.5rem;
+  --spacing-8:  2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-14: 3.5rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-28: 7rem;
+  --spacing-32: 8rem;
+
+  /* ── Border Radius ──────────────────────────────────────────────────────── */
+  --radius-xs:   0.125rem;
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-2xl:  1.5rem;
+  --radius-full: 9999px;
+
+  /* ── Max Width ──────────────────────────────────────────────────────────── */
+  --max-width-container: 88.5rem;
+  --max-width-page:      94.5rem;
+}
+
+/* ─── Variáveis de layout (não geram utilities Tailwind) ────────────────── */
+:root {
+  font-size: 100%;         /* 1rem = 16px — preserva zoom do usuário */
+  --page-padding: 1.5rem;  /* 24px — --grid/page-padding do Figma */
+}
+
+/* ─── BASE LAYER ─────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    @apply scroll-smooth antialiased;
+    font-size: 100%;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans text-body-base;
+  }
+
+  /* ── Headings — todos usam font-display (Stack Sans Headline) ── */
+  h1 { @apply font-display text-display-1 text-ink; }
+  h2 { @apply font-display text-display-2 text-ink; }
+  h3 { @apply font-display text-heading-3 text-ink; }
+  h4 { @apply font-display text-heading-4 text-ink; }
+  h5 { @apply font-display text-heading-5 text-ink; }
+  h6 { @apply font-display text-heading-6 text-ink uppercase; }
+
+  /* ── Parágrafo padrão ── */
+  p { @apply text-body-base text-ink-muted; }
+
+  /* ── Lead paragraph ── */
+  .lead { @apply font-sans text-body-xl text-ink-muted; }
+
+  /* ── Label / Overline (Stack Sans Headline Regular uppercase) ── */
+  .label { @apply font-display text-label text-ink-muted uppercase; }
+
+  /* ── Links ── */
+  a {
+    @apply text-brand underline-offset-4 transition-colors duration-150;
+  }
+
+  a:hover { @apply text-brand/80; }
+
+  /* ── Seleção de texto ── */
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-brand) 20%, transparent);
+    color: var(--color-ink);
+  }
+
+  /* ── Foco acessível (WCAG 2.4.7) ── */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand rounded-sm;
+  }
+}
+
+/* ── Character stagger hover — CTA buttons ──────────────────────────────── */
+/* DOM-clone approach: no text-shadow ink overflow — real elements clipped by    */
+/* overflow:hidden on .char-wrap. Works for all chars including ã, ç, ó, etc.   */
+[data-char-btn] .char-inner {
+  display: inline-flex;
+}
+
+[data-char-btn] .char-wrap {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-char-btn] .char-top {
+  display: block;
+  transform: translateY(0) rotate(0.001deg);
+  transition: transform 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+[data-char-btn] .char-bot {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+  transform: translateY(0) rotate(0.001deg);
+  transition: transform 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+[data-char-btn]:hover .char-top,
+[data-char-btn]:hover .char-bot {
+  transform: translateY(-100%) rotate(0.001deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-char-btn] .char-top,
+  [data-char-btn] .char-bot { transition: none; }
+}

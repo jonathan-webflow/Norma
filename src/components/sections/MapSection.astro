@@ -1,0 +1,70 @@
+---
+// 7 cities for balanced visual distribution across the card:
+//   top-left · top-center · center · top-right · far-right · lower-left · lower-right
+// Formula: card_x = 225 + (lon+180)/360*934, card_y = 55 + (90-lat)/180*478
+const CITIES = [
+  { id: 'new-york',  cx: 500,  cy: 186 },  //  40.7°N,  -74.0°W — top-left
+  { id: 'london',    cx: 692,  cy: 157 },  //  51.5°N,   -0.1°W — top-center
+  { id: 'lagos',     cx: 701,  cy: 276 },  //   6.5°N,    3.4°E — center
+  { id: 'dubai',     cx: 836,  cy: 227 },  //  25.2°N,   55.3°E — top-right
+  { id: 'tokyo',     cx: 1054, cy: 199 },  //  35.7°N,  139.7°E — far right
+  { id: 'sao-paulo', cx: 571,  cy: 356 },  // -23.5°S,  -46.6°W — lower-left
+  { id: 'sydney',    cx: 1084, cy: 384 },  // -33.9°S,  151.2°E — lower-right
+] as const;
+---
+
+<section class="bg-canvas py-[7.5rem]">
+  <div class="mx-auto max-w-container px-4">
+
+    <!-- Card -->
+    <div class="relative overflow-hidden rounded-xl bg-surface" style="height: 588px;">
+
+      <!-- Dot-map background (Figma export, full SVG positioned to show card area) -->
+      <img
+        src="/images/map-dots.svg"
+        alt=""
+        aria-hidden="true"
+        class="absolute pointer-events-none select-none"
+        style="width: 1512px; height: 828px; left: -64px; top: -120px;"
+        loading="lazy"
+        decoding="async"
+      />
+
+      <!-- City nodes (static) -->
+      <svg
+        viewBox="0 0 1384 588"
+        class="absolute inset-0 w-full h-full pointer-events-none"
+        aria-hidden="true"
+      >
+        {CITIES.map((c) => (
+          <g>
+            <circle cx={c.cx} cy={c.cy} r="10" fill="#28492d" fill-opacity="0.08" />
+            <circle cx={c.cx} cy={c.cy} r="4"  fill="#28492d" fill-opacity="0.70" />
+            <circle cx={c.cx} cy={c.cy} r="1.5" fill="#28492d" />
+          </g>
+        ))}
+      </svg>
+
+      <!-- Content layer -->
+      <div class="relative z-10 flex h-full flex-col items-center justify-center gap-8 px-16 text-center">
+        <h2 class="font-display text-display-2 text-ink max-w-[52rem] leading-tight">
+          Não descubra uma divergência<br>quando ela já virou custo.
+        </h2>
+
+        <p class="font-sans text-body-xl text-ink-muted max-w-[44rem]">
+          Receba uma avaliação inicial da prontidão da sua operação para IBS/CBS.<br>
+          Sem custo. Sem compromisso. Você decide o que fazer depois.
+        </p>
+
+        <a
+          href="#contato"
+          class="inline-flex items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-8 h-11 rounded-md"
+          data-char-btn
+        >
+          Solicitar diagnóstico
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>

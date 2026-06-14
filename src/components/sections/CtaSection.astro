@@ -1,0 +1,23 @@
+---
+import type { CtaSection as CtaSectionType } from '../../types/sanity.types';
+import Container from '../layout/Container.astro';
+import Button from '../ui/Button.astro';
+
+interface Props {
+  data: CtaSectionType;
+}
+
+const { data } = Astro.props;
+---
+
+<section id="contact" class="bg-primary py-20 text-white">
+  <Container>
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="font-heading text-3xl font-bold md:text-4xl">{data.heading}</h2>
+      <p class="mt-4 text-neutral-300">{data.description}</p>
+      <div class="mt-8">
+        <Button href={data.ctaUrl} variant="secondary">{data.ctaLabel}</Button>
+      </div>
+    </div>
+  </Container>
+</section>

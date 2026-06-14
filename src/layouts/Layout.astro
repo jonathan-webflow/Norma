@@ -1,0 +1,81 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = '' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <!-- Google Fonts: Stack Sans Headline (headings) + Inter (sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@300;400&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+    <script>
+      function initCharStagger() {
+        document.querySelectorAll<HTMLElement>('[data-char-btn]:not([data-char-init])').forEach((btn) => {
+          btn.dataset.charInit = '1';
+          const text = btn.textContent?.trim() ?? '';
+          btn.innerHTML = '';
+          const inner = document.createElement('span');
+          inner.className = 'char-inner';
+          [...text].forEach((char, i) => {
+            const wrap = document.createElement('span');
+            wrap.className = 'char-wrap';
+            if (char === ' ') wrap.style.whiteSpace = 'pre';
+
+            const top = document.createElement('span');
+            top.className = 'char-top';
+            top.textContent = char;
+            top.style.transitionDelay = `${i * 0.01}s`;
+
+            const bot = document.createElement('span');
+            bot.className = 'char-bot';
+            bot.textContent = char;
+            bot.setAttribute('aria-hidden', 'true');
+            bot.style.transitionDelay = `${i * 0.01}s`;
+
+            wrap.appendChild(top);
+            wrap.appendChild(bot);
+            inner.appendChild(wrap);
+          });
+          btn.appendChild(inner);
+        });
+      }
+      initCharStagger();
+    </script>
+
+    <!-- Smooth scroll (Lenis) — suaviza o scroll global; respeita reduced-motion -->
+    <script>
+      import Lenis from 'lenis';
+      import 'lenis/dist/lenis.css';
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+        function raf(time: number) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+---
+const LOGOS = [
+  { label: 'Union',           cls: 'font-sans font-semibold text-[1.2rem] tracking-[-0.03em]' },
+  { label: 'terra–tory™',    cls: 'font-display text-[1.44rem] tracking-[-0.04em]' },
+  { label: 'FRANCO®',         cls: 'font-sans font-bold text-[1.44rem] uppercase tracking-[-0.02em]' },
+  { label: 'Superior Space®', cls: 'font-display text-[1.1rem] tracking-[-0.02em]' },
+  { label: 'Strobe™',         cls: 'font-sans font-semibold text-[1.68rem] tracking-[-0.06em]' },
+  { label: 'Sophia',          cls: 'font-display text-[1.44rem] tracking-[-0.04em]' },
+  { label: 'Harbor™',         cls: 'font-sans font-medium text-[1.44rem] tracking-[-0.04em]' },
+  { label: 'Human.IN',        cls: 'font-display text-[1.32rem] tracking-[-0.04em]' },
+] as const;
+---
+
+<section class="marquee-section bg-canvas h-28 overflow-hidden">
+  <div class="h-full flex items-center">
+    <div class="marquee-inner flex items-center">
+
+      <!-- Lista acessível -->
+      <ul class="flex items-center gap-24 pr-24 list-none m-0 p-0" aria-label="Marcas parceiras">
+        {LOGOS.map((logo) => (
+          <li class={`shrink-0 whitespace-nowrap text-ink/50 select-none ${logo.cls}`}>
+            {logo.label}
+          </li>
+        ))}
+      </ul>
+
+      <!-- Cópia decorativa para loop contínuo -->
+      <ul class="flex items-center gap-24 pr-24 list-none m-0 p-0" aria-hidden="true">
+        {LOGOS.map((logo) => (
+          <li class={`shrink-0 whitespace-nowrap text-ink/50 select-none ${logo.cls}`}>
+            {logo.label}
+          </li>
+        ))}
+      </ul>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .marquee-section {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 14%,
+      black 86%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 14%,
+      black 86%,
+      transparent 100%
+    );
+  }
+
+  .marquee-inner {
+    animation: marquee 40s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-section:hover .marquee-inner {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-inner {
+      animation: none;
+    }
+  }
+</style>

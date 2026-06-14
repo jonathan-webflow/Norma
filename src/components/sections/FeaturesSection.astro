@@ -1,0 +1,36 @@
+---
+import type { FeaturesSection as FeaturesSectionType } from '../../types/sanity.types';
+import Container from '../layout/Container.astro';
+
+interface Props {
+  data: FeaturesSectionType;
+}
+
+const { data } = Astro.props;
+---
+
+<section id="features" class="py-20">
+  <Container>
+    <div class="mb-12 text-center">
+      <h2 class="font-heading text-3xl font-bold text-primary md:text-4xl">
+        {data.heading}
+      </h2>
+      <div class="mx-auto mt-4 h-1 w-16 rounded bg-accent" aria-hidden="true"></div>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-3">
+      {
+        data.features.map((feature) => (
+          <article class="rounded-xl border border-neutral-200 p-6">
+            <div
+              class="mb-4 h-12 w-12 animate-pulse rounded-lg bg-neutral-200"
+              aria-hidden="true"
+            />
+            <h3 class="mb-2 font-heading text-lg font-semibold text-primary">{feature.title}</h3>
+            <p class="text-sm leading-relaxed text-neutral-600">{feature.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </Container>
+</section>

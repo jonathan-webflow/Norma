@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import MarqueeSection from '../components/sections/MarqueeSection.astro';
+import DotsAnimation from '../components/sections/DotsAnimation.astro';
+import MapSection from '../components/sections/MapSection.astro';
+---
+
+<Layout title="Norma" description="Não deixe sua margem refém do governo nem dos fornecedores">
+  <Header />
+
+  <main>
+    <HeroSection />
+    <MarqueeSection />
+    <DotsAnimation />
+    <MapSection />
+  </main>
+
+  <Footer />
+</Layout>
