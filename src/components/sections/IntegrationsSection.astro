@@ -1,0 +1,117 @@
+---
+// Logos de ERPs/sistemas parceiros (assets exportados do Figma).
+// Alturas fluidas proporcionais ao design (totvs/SAP ~28px, Oracle ~24px).
+const LOGOS = [
+  { src: '/images/logos/totvs.svg',  alt: 'TOTVS',  cls: 'h-[clamp(1.5rem,1.3rem+1vw,1.75rem)]' },
+  { src: '/images/logos/oracle.png', alt: 'Oracle', cls: 'h-[clamp(1.25rem,1.1rem+0.75vw,1.5rem)]' },
+  { src: '/images/logos/sap.png',    alt: 'SAP',    cls: 'h-[clamp(1.5rem,1.3rem+1vw,1.75rem)]' },
+] as const;
+---
+
+<section class="bg-canvas py-section">
+  <div class="mx-auto max-w-container px-gutter">
+
+    <!-- Card com borda — 2 colunas no desktop, empilhado abaixo de lg -->
+    <div class="flex flex-col lg:flex-row items-stretch border-2 border-[#f0f0ea] rounded-xl overflow-hidden">
+
+      <!-- Coluna esquerda: label + heading + body -->
+      <div
+        class="flex-1 flex flex-col gap-6 border-b-2 lg:border-b-0 lg:border-r-2 border-[#f0f0ea] px-[clamp(1.5rem,1rem+2.5vw,2.5rem)] py-[clamp(2rem,1.4rem+3vw,3rem)]"
+      >
+        <!-- Label pill -->
+        <div class="inline-flex self-start items-center gap-2.5 bg-[#f0f0ea] px-3 py-2 rounded-md">
+          <svg
+            class="w-[0.875rem] h-auto text-brand"
+            width="14"
+            height="12"
+            viewBox="0 0 14 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path d="M9.5 5H12.5C12.7652 5 13.0196 4.89464 13.2071 4.70711C13.3946 4.51957 13.5 4.26522 13.5 4V1C13.5 0.734784 13.3946 0.48043 13.2071 0.292893C13.0196 0.105357 12.7652 0 12.5 0H9.5C9.23478 0 8.98043 0.105357 8.79289 0.292893C8.60536 0.48043 8.5 0.734784 8.5 1V2H7.5C7.10218 2 6.72064 2.15804 6.43934 2.43934C6.15804 2.72064 6 3.10218 6 3.5V5.5H4V5C4 4.73478 3.89464 4.48043 3.70711 4.29289C3.51957 4.10536 3.26522 4 3 4H1C0.734784 4 0.48043 4.10536 0.292893 4.29289C0.105357 4.48043 0 4.73478 0 5V7C0 7.26522 0.105357 7.51957 0.292893 7.70711C0.48043 7.89464 0.734784 8 1 8H3C3.26522 8 3.51957 7.89464 3.70711 7.70711C3.89464 7.51957 4 7.26522 4 7V6.5H6V8.5C6 8.89782 6.15804 9.27936 6.43934 9.56066C6.72064 9.84196 7.10218 10 7.5 10H8.5V11C8.5 11.2652 8.60536 11.5196 8.79289 11.7071C8.98043 11.8946 9.23478 12 9.5 12H12.5C12.7652 12 13.0196 11.8946 13.2071 11.7071C13.3946 11.5196 13.5 11.2652 13.5 11V8C13.5 7.73478 13.3946 7.48043 13.2071 7.29289C13.0196 7.10536 12.7652 7 12.5 7H9.5C9.23478 7 8.98043 7.10536 8.79289 7.29289C8.60536 7.48043 8.5 7.73478 8.5 8V9H7.5C7.36739 9 7.24021 8.94732 7.14645 8.85355C7.05268 8.75979 7 8.63261 7 8.5V3.5C7 3.36739 7.05268 3.24021 7.14645 3.14645C7.24021 3.05268 7.36739 3 7.5 3H8.5V4C8.5 4.26522 8.60536 4.51957 8.79289 4.70711C8.98043 4.89464 9.23478 5 9.5 5ZM3 7H1V5H3V7ZM9.5 8H12.5V11H9.5V8ZM9.5 1H12.5V4H9.5V1Z" fill="currentColor" />
+          </svg>
+          <span class="font-display text-label text-brand uppercase tracking-[0.02em]">
+            Integrações
+          </span>
+        </div>
+
+        <!-- Heading + body -->
+        <div class="flex flex-col gap-4">
+          <h2 class="font-display text-display-2 text-ink leading-tight tracking-[-0.01em] max-w-[29rem]">
+            Integração nativa ao seu ecossistema.
+          </h2>
+          <p class="font-sans text-body-base text-ink leading-[1.4] max-w-[29rem]">
+            A Norma se conecta ao ERP, banco e sistemas que você já usa. Sem migração, sem reconfiguração: tudo acontece sobre o que já está funcionando.
+          </p>
+        </div>
+      </div>
+
+      <!-- Coluna direita: marquee de logos -->
+      <div class="integr-marquee relative flex-1 flex items-center overflow-hidden min-h-[clamp(7rem,5rem+6vw,9rem)] px-4">
+        <div class="marquee-inner flex items-center w-max shrink-0">
+
+          <!-- Lista acessível -->
+          <ul class="flex items-center gap-[clamp(2.5rem,1.5rem+4vw,4.5rem)] pr-[clamp(2.5rem,1.5rem+4vw,4.5rem)] list-none m-0 p-0" aria-label="Sistemas integrados">
+            {LOGOS.map((logo) => (
+              <li class="shrink-0">
+                <img src={logo.src} alt={logo.alt} class={`w-auto select-none ${logo.cls}`} loading="lazy" decoding="async" />
+              </li>
+            ))}
+          </ul>
+
+          <!-- Cópia decorativa para loop contínuo -->
+          <ul class="flex items-center gap-[clamp(2.5rem,1.5rem+4vw,4.5rem)] pr-[clamp(2.5rem,1.5rem+4vw,4.5rem)] list-none m-0 p-0" aria-hidden="true">
+            {LOGOS.map((logo) => (
+              <li class="shrink-0">
+                <img src={logo.src} alt="" class={`w-auto select-none ${logo.cls}`} loading="lazy" decoding="async" />
+              </li>
+            ))}
+          </ul>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Fade nas bordas (esq/dir) — mesmo enquadramento do Figma */
+  .integr-marquee {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 12%,
+      black 88%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 12%,
+      black 88%,
+      transparent 100%
+    );
+  }
+
+  .marquee-inner {
+    animation: marquee 28s linear infinite;
+    will-change: transform;
+  }
+
+  .integr-marquee:hover .marquee-inner {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-inner {
+      animation: none;
+    }
+  }
+</style>

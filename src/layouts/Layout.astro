@@ -70,6 +70,7 @@ const { title, description = '' } = Astro.props;
 
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+        (window as any).__lenis = lenis; // exposto p/ sincronizar o GSAP ScrollTrigger
         function raf(time: number) {
           lenis.raf(time);
           requestAnimationFrame(raf);

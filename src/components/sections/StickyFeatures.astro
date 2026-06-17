@@ -1,0 +1,159 @@
+---
+// Features com sticky-stack: cada bloco prende no topo (≥lg) e o próximo
+// desliza por cima (z-index crescente + fundo opaco). GSAP faz só um scrub
+// sutil no card visual ao entrar. Conteúdo e visuais do Figma (node 858:1017).
+const TILES = [
+  {
+    label: 'Split Payment',
+    icon: '/images/tiles/icons/split.svg',
+    rotateIcon: false,
+    heading: 'Não perca o\ncrédito que é seu',
+    body: [
+      'Garanta seus créditos nos pagamentos, automatizando o recolhimento do imposto pelo fornecedor via RAD (Recolhimento pelo Adquirente) ou split payment oficial.',
+      'Cruzamos cada pagamento do seu contas a pagar com o débito da Apuração Assistida e, se necessário, emitimos a guia RAD automaticamente. Você paga o líquido para o fornecedor, recolhe o imposto e garante seus créditos.',
+    ],
+    image: '/images/tiles/split-payment.png',
+    alt: 'Painel de pagamento ao fornecedor com recolhimento automático via RAD',
+  },
+  {
+    label: 'Auditoria da Apuração Assistida',
+    icon: '/images/tiles/icons/auditoria.svg',
+    rotateIcon: false,
+    heading: 'Corrija os erros na\napuração antes que eles\ncustem caro',
+    body: [
+      'Conciliamos a apuração do governo com o seu ERP e extrato bancário, apontando divergências e suas causas.',
+      'Painel atualizado em tempo real, para você acompanhar os erros ao longo do mês e ter tempo de contestar.',
+    ],
+    image: '/images/tiles/auditoria.png',
+    alt: 'Painel de inconsistências da apuração com divergências e contestações',
+  },
+  {
+    label: 'Monitor de fornecedores',
+    icon: '/images/tiles/icons/fornecedores.svg',
+    rotateIcon: true,
+    heading: 'Trabalhe com\nfornecedores que\notimizem seus créditos',
+    body: [
+      'Monitore sua cadeia de fornecedores em tempo real e identifique quem pode comprometer a apropriação dos créditos da sua empresa.',
+      'Com score proprietário de risco, monitoramento de recolhimento e régua de cobrança automática, você age sobre os fornecedores inadimplentes antes que eles comprometam sua margem.',
+    ],
+    image: '/images/tiles/fornecedores.png',
+    alt: 'Tabela de fornecedores com score de risco e crédito em risco',
+  },
+] as const;
+---
+
+<section class="bg-canvas py-section">
+  <div class="mx-auto max-w-container px-gutter">
+    <div class="flex flex-col gap-[clamp(4rem,2rem+8vw,10rem)]">
+
+      {TILES.map((tile, i) => (
+        <article
+          data-tile
+          class="tile bg-canvas border-t border-[#d2d2d2] pt-[clamp(2rem,1rem+3vw,5rem)] lg:sticky"
+          style={`z-index:${i + 1};`}
+        >
+          <div class="flex flex-col lg:flex-row lg:items-end gap-[clamp(2rem,1rem+4vw,5rem)]">
+
+            <!-- Esquerda: conteúdo -->
+            <div class="flex-1 flex flex-col gap-flow lg:justify-between lg:self-stretch">
+              <div class="flex flex-col gap-4">
+                <div class="inline-flex self-start items-center gap-2.5 bg-[#f0f0ea] px-3 py-2 rounded-md">
+                  <img src={tile.icon} alt="" width="16" height="16" class={tile.rotateIcon ? 'w-4 h-4 rotate-180' : 'w-4 h-4'} aria-hidden="true" />
+                  <span class="font-display text-label text-brand uppercase tracking-[0.02em] whitespace-nowrap">
+                    {tile.label}
+                  </span>
+                </div>
+                <h2 class="font-display text-ink leading-[1.1] tracking-[-0.01em] text-[clamp(1.75rem,1.2rem+2vw,2.5rem)] whitespace-normal lg:whitespace-pre-line lg:[text-wrap:initial] lg:text-[clamp(2.25rem,0.29rem+3.07vw,3.1875rem)] lg:max-w-none">
+                  {tile.heading}
+                </h2>
+              </div>
+
+              <div class="flex flex-col gap-10 max-w-[38rem]">
+                <div class="flex flex-col gap-4">
+                  {tile.body.map((p) => (
+                    <p class="font-sans text-[1.125rem] leading-[1.6] text-ink">{p}</p>
+                  ))}
+                </div>
+                <a
+                  href="#contato"
+                  class="inline-flex self-start items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-12 rounded-md"
+                  data-char-btn
+                >
+                  Fale conosco
+                </a>
+              </div>
+            </div>
+
+            <!-- Direita: card visual -->
+            <div data-tile-visual class="w-full lg:w-[min(42vw,40.875rem)] shrink-0">
+              <img
+                src={tile.image}
+                alt={tile.alt}
+                width="654"
+                height="654"
+                class="w-full aspect-square object-cover rounded-xl"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+
+          </div>
+        </article>
+      ))}
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Sticky-stack só no desktop (≥64rem). Mobile/tablet = blocos estáticos. */
+  @media (min-width: 64rem) {
+    .tile {
+      top: clamp(4rem, 2rem + 4vw, 6rem);
+    }
+  }
+
+  /* Acessibilidade: sem sticky para quem prefere menos movimento */
+  @media (prefers-reduced-motion: reduce) {
+    .tile {
+      position: static !important;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Sincroniza o ScrollTrigger com o scroll suave do Lenis (exposto no Layout)
+  const lenis = (window as any).__lenis;
+  if (lenis) lenis.on('scroll', ScrollTrigger.update);
+
+  // Scrub sutil do card visual — só desktop e sem reduced-motion
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 64rem) and (prefers-reduced-motion: no-preference)', () => {
+    const tiles = document.querySelectorAll<HTMLElement>('[data-tile]');
+    tiles.forEach((tile) => {
+      const visual = tile.querySelector<HTMLElement>('[data-tile-visual]');
+      if (!visual) return;
+      gsap.fromTo(
+        visual,
+        { yPercent: 8, scale: 0.97, autoAlpha: 0.85 },
+        {
+          yPercent: 0,
+          scale: 1,
+          autoAlpha: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: tile,
+            start: 'top 85%',
+            end: 'top 35%',
+            scrub: true,
+          },
+        }
+      );
+    });
+  });
+</script>

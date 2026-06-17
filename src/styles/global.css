@@ -146,6 +146,7 @@
   }
 
   /* ── Headings — todos usam font-display (Stack Sans Headline) ── */
+  /* text-wrap: balance equilibra as linhas e evita palavra órfã na última linha */
   h1 { @apply font-display text-display-1 text-ink; }
   h2 { @apply font-display text-display-2 text-ink; }
   h3 { @apply font-display text-heading-3 text-ink; }
@@ -153,8 +154,14 @@
   h5 { @apply font-display text-heading-5 text-ink; }
   h6 { @apply font-display text-heading-6 text-ink uppercase; }
 
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+
   /* ── Parágrafo padrão ── */
+  /* text-wrap: pretty evita órfãs/última linha muito curta no corpo de texto */
   p { @apply text-body-base text-ink-muted; }
+  p { text-wrap: pretty; }
 
   /* ── Lead paragraph ── */
   .lead { @apply font-sans text-body-xl text-ink-muted; }
