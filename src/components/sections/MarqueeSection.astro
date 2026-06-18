@@ -1,38 +1,74 @@
 ---
+import { Image } from 'astro:assets';
+import cvs           from '../../assets/images/logos/clients/cvs.png';
+import coelhoDiniz   from '../../assets/images/logos/clients/coelho-diniz.png';
+import apetito       from '../../assets/images/logos/clients/apetito.png';
+import locmed        from '../../assets/images/logos/clients/locmed.png';
+import grupoLider    from '../../assets/images/logos/clients/grupo-lider.png';
+import atacadoMar    from '../../assets/images/logos/clients/atacado-maringa.png';
+import noromix       from '../../assets/images/logos/clients/noromix.png';
+import nobreCestas   from '../../assets/images/logos/clients/nobre-cestas.png';
+import mococa        from '../../assets/images/logos/clients/mococa.png';
+
 const LOGOS = [
-  { label: 'Union',           cls: 'font-sans font-semibold text-[clamp(1.02rem,0.92rem+0.5vw,1.2rem)] tracking-[-0.03em]' },
-  { label: 'terra–tory™',    cls: 'font-display text-[clamp(1.22rem,1.06rem+0.7vw,1.44rem)] tracking-[-0.04em]' },
-  { label: 'FRANCO®',         cls: 'font-sans font-bold text-[clamp(1.22rem,1.06rem+0.7vw,1.44rem)] uppercase tracking-[-0.02em]' },
-  { label: 'Superior Space®', cls: 'font-display text-[clamp(0.94rem,0.85rem+0.45vw,1.1rem)] tracking-[-0.02em]' },
-  { label: 'Strobe™',         cls: 'font-sans font-semibold text-[clamp(1.43rem,1.25rem+0.8vw,1.68rem)] tracking-[-0.06em]' },
-  { label: 'Sophia',          cls: 'font-display text-[clamp(1.22rem,1.06rem+0.7vw,1.44rem)] tracking-[-0.04em]' },
-  { label: 'Harbor™',         cls: 'font-sans font-medium text-[clamp(1.22rem,1.06rem+0.7vw,1.44rem)] tracking-[-0.04em]' },
-  { label: 'Human.IN',        cls: 'font-display text-[clamp(1.12rem,1rem+0.6vw,1.32rem)] tracking-[-0.04em]' },
+  { src: cvs,        alt: 'Comercial Villa Simpatia' },
+  { src: coelhoDiniz,alt: 'Coelho Diniz'             },
+  { src: apetito,    alt: 'apetito Foods'            },
+  { src: locmed,     alt: 'LOCMED Hospitalar'        },
+  { src: grupoLider, alt: 'Grupo Líder'              },
+  { src: atacadoMar, alt: 'Atacado Maringá'          },
+  { src: noromix,    alt: 'Noromix'                  },
+  { src: nobreCestas,alt: 'Nobre Cestas'             },
+  { src: mococa,     alt: 'Mococa'                   },
 ] as const;
 ---
 
-<section class="marquee-section bg-canvas h-[clamp(4.5rem,3.6rem+3.6vw,7rem)] overflow-hidden">
-  <div class="h-full flex items-center">
-    <div class="marquee-inner flex items-center">
+<section class="marquee-section bg-canvas flex items-center">
+  <div class="mx-auto w-full max-w-container px-gutter">
+    <div class="marquee-viewport relative overflow-hidden">
+      <div class="marquee-inner flex items-center">
 
-      <!-- Lista acessível -->
-      <ul class="flex items-center gap-[clamp(2.5rem,1rem+6vw,6rem)] pr-[clamp(2.5rem,1rem+6vw,6rem)] list-none m-0 p-0" aria-label="Marcas parceiras">
-        {LOGOS.map((logo) => (
-          <li class={`shrink-0 whitespace-nowrap text-ink/50 select-none ${logo.cls}`}>
-            {logo.label}
-          </li>
-        ))}
-      </ul>
+        <!-- Lista acessível -->
+        <ul class="logo-list list-none m-0 p-0" aria-label="Clientes da Norma">
+          {LOGOS.map((logo) => (
+            <li class="logo-item">
+              <span class="logo-wrap">
+                <Image
+                  src={logo.src}
+                  alt={logo.alt}
+                  widths={[160]}
+                  sizes="160px"
+                  format="webp"
+                  quality={90}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+            </li>
+          ))}
+        </ul>
 
-      <!-- Cópia decorativa para loop contínuo -->
-      <ul class="flex items-center gap-[clamp(2.5rem,1rem+6vw,6rem)] pr-[clamp(2.5rem,1rem+6vw,6rem)] list-none m-0 p-0" aria-hidden="true">
-        {LOGOS.map((logo) => (
-          <li class={`shrink-0 whitespace-nowrap text-ink/50 select-none ${logo.cls}`}>
-            {logo.label}
-          </li>
-        ))}
-      </ul>
+        <!-- Cópia decorativa para loop contínuo -->
+        <ul class="logo-list list-none m-0 p-0" aria-hidden="true">
+          {LOGOS.map((logo) => (
+            <li class="logo-item">
+              <span class="logo-wrap">
+                <Image
+                  src={logo.src}
+                  alt=""
+                  widths={[160]}
+                  sizes="160px"
+                  format="webp"
+                  quality={90}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+            </li>
+          ))}
+        </ul>
 
+      </div>
     </div>
   </div>
 </section>
@@ -44,29 +80,63 @@ const LOGOS = [
   }
 
   .marquee-section {
+    height: clamp(4.5rem, 3.6rem + 3.6vw, 7rem);
+  }
+
+  .marquee-viewport {
     -webkit-mask-image: linear-gradient(
       to right,
       transparent 0%,
-      black 14%,
-      black 86%,
+      black 6%,
+      black 94%,
       transparent 100%
     );
     mask-image: linear-gradient(
       to right,
       transparent 0%,
-      black 14%,
-      black 86%,
+      black 6%,
+      black 94%,
       transparent 100%
     );
   }
 
   .marquee-inner {
-    animation: marquee 40s linear infinite;
+    animation: marquee 24s linear infinite;
     will-change: transform;
+  }
+
+  .logo-list {
+    display: flex;
+    align-items: center;
+    gap: clamp(2.5rem, 1rem + 6vw, 6rem);
+    padding-right: clamp(2.5rem, 1rem + 6vw, 6rem);
+    flex-shrink: 0;
+  }
+
+  .logo-item {
+    flex-shrink: 0;
+  }
+
+  .logo-wrap {
+    display: block;
+  }
+
+  /* Dimensiona e aplica o tom cinza muted */
+  .logo-wrap img {
+    display: block;
+    height: clamp(1.5rem, 1.2rem + 1.2vw, 2.5rem);
+    width: auto;
+    user-select: none;
+    filter: grayscale(1) opacity(0.45);
+    transition: filter 0.25s ease;
   }
 
   .marquee-section:hover .marquee-inner {
     animation-play-state: paused;
+  }
+
+  .marquee-section:hover .logo-wrap img {
+    filter: grayscale(1) opacity(0.65);
   }
 
   @media (prefers-reduced-motion: reduce) {
