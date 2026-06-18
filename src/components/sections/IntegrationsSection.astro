@@ -1,11 +1,17 @@
 ---
 // Logos de ERPs/sistemas parceiros (assets exportados do Figma).
 // Alturas fluidas proporcionais ao design (totvs/SAP ~28px, Oracle ~24px).
+// SVG (totvs) fica como string em /public; rasters (oracle/sap) passam pelo
+// astro:assets → WebP otimizado.
+import { Image } from 'astro:assets';
+import oracle from '../../assets/images/logos/oracle.png';
+import sap from '../../assets/images/logos/sap.png';
+
 const LOGOS = [
-  { src: '/images/logos/totvs.svg',  alt: 'TOTVS',  cls: 'h-[clamp(1.5rem,1.3rem+1vw,1.75rem)]' },
-  { src: '/images/logos/oracle.png', alt: 'Oracle', cls: 'h-[clamp(1.25rem,1.1rem+0.75vw,1.5rem)]' },
-  { src: '/images/logos/sap.png',    alt: 'SAP',    cls: 'h-[clamp(1.5rem,1.3rem+1vw,1.75rem)]' },
-] as const;
+  { src: '/images/logos/totvs.svg', alt: 'TOTVS',  cls: 'h-[clamp(1.5rem,1.3rem+1vw,1.75rem)]' },
+  { src: oracle,                    alt: 'Oracle', cls: 'h-[clamp(1.25rem,1.1rem+0.75vw,1.5rem)]' },
+  { src: sap,                       alt: 'SAP',    cls: 'h-[clamp(1.5rem,1.3rem+1vw,1.75rem)]' },
+];
 ---
 
 <section class="bg-canvas py-section">
@@ -55,7 +61,9 @@ const LOGOS = [
           <ul class="flex items-center gap-[clamp(2.5rem,1.5rem+4vw,4.5rem)] pr-[clamp(2.5rem,1.5rem+4vw,4.5rem)] list-none m-0 p-0" aria-label="Sistemas integrados">
             {LOGOS.map((logo) => (
               <li class="shrink-0">
-                <img src={logo.src} alt={logo.alt} class={`w-auto select-none ${logo.cls}`} loading="lazy" decoding="async" />
+                {typeof logo.src === 'string'
+                  ? <img src={logo.src} alt={logo.alt} class={`w-auto select-none ${logo.cls}`} loading="lazy" decoding="async" />
+                  : <Image src={logo.src} alt={logo.alt} format="webp" quality={90} class={`w-auto select-none ${logo.cls}`} loading="lazy" decoding="async" />}
               </li>
             ))}
           </ul>
@@ -64,7 +72,9 @@ const LOGOS = [
           <ul class="flex items-center gap-[clamp(2.5rem,1.5rem+4vw,4.5rem)] pr-[clamp(2.5rem,1.5rem+4vw,4.5rem)] list-none m-0 p-0" aria-hidden="true">
             {LOGOS.map((logo) => (
               <li class="shrink-0">
-                <img src={logo.src} alt="" class={`w-auto select-none ${logo.cls}`} loading="lazy" decoding="async" />
+                {typeof logo.src === 'string'
+                  ? <img src={logo.src} alt="" class={`w-auto select-none ${logo.cls}`} loading="lazy" decoding="async" />
+                  : <Image src={logo.src} alt="" format="webp" quality={90} class={`w-auto select-none ${logo.cls}`} loading="lazy" decoding="async" />}
               </li>
             ))}
           </ul>

@@ -1,6 +1,9 @@
 ---
 // Seção "Risco da Reforma" (Figma 867:883): visual à esquerda + conteúdo à direita
 // (heading, subtítulo, 3 pontos com ícone, CTA). Bloco estático, padrão de layout do projeto.
+import { Image } from 'astro:assets';
+import riscoReforma from '../../assets/images/tiles/risco-reforma.png';
+
 const HEADING = 'O maior risco da Reforma\nestá nos próximos meses';
 const POINTS = [
   {
@@ -24,11 +27,13 @@ const POINTS = [
 
       <!-- Esquerda: visual -->
       <div class="w-full lg:w-[min(42vw,39.75rem)] shrink-0">
-        <img
-          src="/images/tiles/risco-reforma.png"
+        <Image
+          src={riscoReforma}
           alt="Representação abstrata da transição da Reforma Tributária"
-          width="636"
-          height="680"
+          widths={[400, 636]}
+          sizes="(min-width: 64rem) 39.75rem, 100vw"
+          format="webp"
+          quality={90}
           class="w-full h-full object-cover rounded-xl aspect-[636/680] lg:aspect-auto"
           loading="lazy"
           decoding="async"

@@ -2,6 +2,11 @@
 // Features com sticky-stack: cada bloco prende no topo (≥lg) e o próximo
 // desliza por cima (z-index crescente + fundo opaco). GSAP faz só um scrub
 // sutil no card visual ao entrar. Conteúdo e visuais do Figma (node 858:1017).
+import { Image } from 'astro:assets';
+import splitPayment from '../../assets/images/tiles/split-payment.png';
+import auditoria from '../../assets/images/tiles/auditoria.png';
+import fornecedores from '../../assets/images/tiles/fornecedores.png';
+
 const TILES = [
   {
     label: 'Split Payment',
@@ -12,7 +17,7 @@ const TILES = [
       'Garanta seus créditos nos pagamentos, automatizando o recolhimento do imposto pelo fornecedor via RAD (Recolhimento pelo Adquirente) ou split payment oficial.',
       'Cruzamos cada pagamento do seu contas a pagar com o débito da Apuração Assistida e, se necessário, emitimos a guia RAD automaticamente. Você paga o líquido para o fornecedor, recolhe o imposto e garante seus créditos.',
     ],
-    image: '/images/tiles/split-payment.png',
+    image: splitPayment,
     alt: 'Painel de pagamento ao fornecedor com recolhimento automático via RAD',
   },
   {
@@ -24,7 +29,7 @@ const TILES = [
       'Conciliamos a apuração do governo com o seu ERP e extrato bancário, apontando divergências e suas causas.',
       'Painel atualizado em tempo real, para você acompanhar os erros ao longo do mês e ter tempo de contestar.',
     ],
-    image: '/images/tiles/auditoria.png',
+    image: auditoria,
     alt: 'Painel de inconsistências da apuração com divergências e contestações',
   },
   {
@@ -36,7 +41,7 @@ const TILES = [
       'Monitore sua cadeia de fornecedores em tempo real e identifique quem pode comprometer a apropriação dos créditos da sua empresa.',
       'Com score proprietário de risco, monitoramento de recolhimento e régua de cobrança automática, você age sobre os fornecedores inadimplentes antes que eles comprometam sua margem.',
     ],
-    image: '/images/tiles/fornecedores.png',
+    image: fornecedores,
     alt: 'Tabela de fornecedores com score de risco e crédito em risco',
   },
 ] as const;
@@ -86,11 +91,13 @@ const TILES = [
 
             <!-- Direita: card visual -->
             <div data-tile-visual class="w-full lg:w-[min(42vw,40.875rem)] shrink-0">
-              <img
+              <Image
                 src={tile.image}
                 alt={tile.alt}
-                width="654"
-                height="654"
+                widths={[400, 654]}
+                sizes="(min-width: 64rem) 40.875rem, 100vw"
+                format="webp"
+                quality={90}
                 class="w-full aspect-square object-cover rounded-xl"
                 loading="lazy"
                 decoding="async"

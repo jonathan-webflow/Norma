@@ -1,4 +1,6 @@
 ---
+import { Picture } from 'astro:assets';
+import heroDashboard from '../../assets/images/hero-dashboard.png';
 ---
 
 <section class="bg-canvas">
@@ -33,12 +35,15 @@
     </div>
 
     <!-- Row 2: Imagem dentro do box -->
-    <div class="relative mt-section mb-8 rounded-xl overflow-hidden h-[clamp(16rem,8rem+30vw,32.5rem)] bg-surface">
-      <img
-        src="/images/hero-bg.jpg"
-        alt=""
-        width="1280"
-        height="520"
+    <div class="relative mt-section mb-8 rounded-xl overflow-hidden aspect-[59/31] bg-surface">
+      <Picture
+        src={heroDashboard}
+        alt="Painel da Norma com a apuração da CBS conciliada entre Fisco e ERP"
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        widths={[640, 960, 1416]}
+        sizes="(min-width: 88.5rem) 1416px, 100vw"
+        quality={95}
         class="w-full h-full object-cover"
         loading="eager"
       />
