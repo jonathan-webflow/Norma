@@ -1,17 +1,16 @@
 ---
-// Seção "O Que Muda" — sticky scroll com 2 passos (Figma 901:4161 e 901:4193).
-// Referência de animação: osmo-sticky-features.webflow.io (script adaptado abaixo).
-// Desktop (≥64rem): seção pina no centro da viewport; scroll extra troca o step
-// via clip-path no visual e fade+y nos textos. Mobile: estático, ambos os steps visíveis.
+// Seção "O Que Muda" — sticky scroll com 2 passos (Figma 908:4234 e 908:4266).
+// Desktop (≥64rem): seção pina; ambos os steps ficam visíveis na esquerda (nav permanente),
+// só o ativo muda de cor. Visual troca via clip-path; bullets trocam via autoAlpha.
 import { Image } from 'astro:assets';
 import walletImg from '../../assets/images/tiles/omuda-wallet.png';
 import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 ---
 
-<section data-omuda-wrap class="omuda-section bg-canvas py-section">
+<section data-omuda-wrap class="omuda-section py-section">
   <div class="mx-auto max-w-container px-gutter">
 
-    <!-- ── STATIC HEADER (permanece visível durante o pin) ─────────── -->
+    <!-- ── STATIC HEADER ─────────────────────────────────────────────── -->
     <div class="omuda-header">
 
       <!-- Eyebrow pill -->
@@ -22,34 +21,58 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
         <span class="font-display text-label text-brand uppercase tracking-[0.02em]">O QUE MUDA</span>
       </div>
 
-      <!-- H2 principal -->
+      <!-- H2: 2 linhas conforme Figma (br forçado no ponto natural de quebra) -->
       <h2 class="omuda-heading font-display font-light text-ink text-center leading-[1.4] tracking-[-0.01em]">
-        Na Reforma sua margem depende do fornecedor recolher e do governo apurar o imposto corretamente
+        Na Reforma sua margem depende do fornecedor<br>
+        recolher e do governo apurar o imposto corretamente
       </h2>
     </div>
 
     <!-- ── DYNAMIC STAGE ──────────────────────────────────────────────
-         Desktop: os [data-omuda-item] e [data-omuda-visual] são posicionados
-         absolutamente dentro do stage. O step-wrapper é semântico mas não cria
-         contexto de posicionamento — os filhos escapam para o stage.
-         Mobile: step-wrappers empilham flex-column, tudo em fluxo normal.
+         Desktop: navegador esquerdo permanente (omuda-nav) + visuais e bullets
+         posicionados absolutamente dentro do stage.
+         Mobile: omuda-nav oculto; step-wrappers empilham em coluna.
     ─────────────────────────────────────────────────────────────────── -->
     <div class="omuda-stage">
 
+      <!-- ── NAV ESQUERDO PERMANENTE (desktop) ──────────────────────── -->
+      <!-- Ambos os steps sempre visíveis; GSAP alterna data-active para mudar cor -->
+      <nav class="omuda-nav" aria-label="Passos da seção">
+        <div data-omuda-nav-step="0" data-active class="step-nav-row">
+          <span class="step-num">01</span>
+          <p class="step-sub">O crédito passa a ser financeiro, não mais escritural</p>
+        </div>
+        <div data-omuda-nav-step="1" class="step-nav-row">
+          <span class="step-num">02</span>
+          <p class="step-sub">A apuração do imposto passa a ser feita pelo governo</p>
+        </div>
+      </nav>
+
       <!-- ══ STEP 01 ══════════════════════════════════════════════════ -->
       <div class="step-wrapper">
+        <!-- Cabeçalho mobile (hidden no desktop — nav faz o papel) -->
+        <div class="step-mobile-header">
+          <span class="step-num">01</span>
+          <h3 class="step-sub">O crédito passa a ser financeiro, não mais escritural</h3>
+        </div>
 
-        <div data-omuda-item class="omuda-item">
-          <!-- Esquerda: número + sub-heading lado a lado -->
-          <div class="omuda-left">
-            <div class="omuda-feature-row">
-              <span data-omuda-text class="step-num">01</span>
-              <h3 data-omuda-text class="step-sub">O crédito passa a ser financeiro, não mais escritural</h3>
-            </div>
-          </div>
-          <!-- Espaçador central (desktop) — reserva o espaço do visual -->
-          <div class="omuda-center-spacer" aria-hidden="true"></div>
-          <!-- Direita: bullets -->
+        <!-- Visual 01 -->
+        <div data-omuda-visual class="omuda-visual">
+          <Image
+            src={walletImg}
+            alt="Ícone de carteira dourado sobre fundo verde escuro"
+            widths={[600, 900, 1200]}
+            sizes="(min-width: 64rem) 300px, 90vw"
+            format="avif"
+            quality={90}
+            class="omuda-visual-img"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <!-- Bullets 01 (único conteúdo do data-omuda-item) -->
+        <div data-omuda-item class="omuda-bullets">
           <ul class="omuda-right">
             <li data-omuda-text class="bullet-item">
               <span class="bullet-badge" aria-hidden="true">
@@ -69,12 +92,21 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
             </li>
           </ul>
         </div>
+      </div>
 
-        <!-- Visual 01 -->
+      <!-- ══ STEP 02 ══════════════════════════════════════════════════ -->
+      <div class="step-wrapper">
+        <!-- Cabeçalho mobile -->
+        <div class="step-mobile-header">
+          <span class="step-num">02</span>
+          <h3 class="step-sub">A apuração do imposto passa a ser feita pelo governo</h3>
+        </div>
+
+        <!-- Visual 02 -->
         <div data-omuda-visual class="omuda-visual">
           <Image
-            src={walletImg}
-            alt="Ícone de carteira dourado sobre fundo verde escuro"
+            src={govImg}
+            alt="Ícone de prédio governamental dourado sobre fundo verde escuro"
             widths={[600, 900, 1200]}
             sizes="(min-width: 64rem) 300px, 90vw"
             format="avif"
@@ -84,19 +116,9 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
             decoding="async"
           />
         </div>
-      </div>
 
-      <!-- ══ STEP 02 ══════════════════════════════════════════════════ -->
-      <div class="step-wrapper">
-
-        <div data-omuda-item class="omuda-item">
-          <div class="omuda-left">
-            <div class="omuda-feature-row">
-              <span data-omuda-text class="step-num">02</span>
-              <h3 data-omuda-text class="step-sub">A apuração do imposto passa a ser feita pelo governo</h3>
-            </div>
-          </div>
-          <div class="omuda-center-spacer" aria-hidden="true"></div>
+        <!-- Bullets 02 -->
+        <div data-omuda-item class="omuda-bullets">
           <ul class="omuda-right">
             <li data-omuda-text class="bullet-item">
               <span class="bullet-badge" aria-hidden="true">
@@ -116,21 +138,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
             </li>
           </ul>
         </div>
-
-        <!-- Visual 02 -->
-        <div data-omuda-visual class="omuda-visual">
-          <Image
-            src={govImg}
-            alt="Ícone de prédio governamental dourado sobre fundo verde escuro"
-            widths={[600, 900, 1200]}
-            sizes="(min-width: 64rem) 300px, 90vw"
-            format="avif"
-            quality={90}
-            class="omuda-visual-img"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
       </div>
 
     </div><!-- /.omuda-stage -->
@@ -139,6 +146,20 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 </section>
 
 <style>
+  /* ═══════════════════════════════════════════════════════════════════
+     SECTION — dot pattern background (Figma: Pattern 24% + #fcfcf6)
+  ═══════════════════════════════════════════════════════════════════ */
+
+  .omuda-section {
+    background-color: var(--color-canvas);
+    background-image: radial-gradient(
+      circle,
+      rgba(35, 31, 35, 0.12) 1.5px,
+      transparent 1.5px
+    );
+    background-size: 24px 24px;
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      BASE (mobile-first)
   ═══════════════════════════════════════════════════════════════════ */
@@ -151,43 +172,40 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     margin-bottom: clamp(2rem, 2.7vw, 2.5rem);
   }
 
+  /* H2: máx 2rem = 32px para coincidir com Figma spec */
   .omuda-heading {
-    font-size: clamp(1.5rem, 1rem + 2.5vw, 2rem);
+    font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2rem);
     max-width: 50rem;
     letter-spacing: -0.01em;
   }
 
-  /* Step wrappers: mobile = flex-column, each step shows top-to-bottom */
+  /* Step wrappers: mobile = flex-column */
   .step-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .step-wrapper + .step-wrapper {
-    margin-top: clamp(2rem, 4vw, 3rem);
-    padding-top: clamp(2rem, 4vw, 3rem);
-    border-top: 1px solid #e0e0e0;
-  }
-
-  /* Item inner layout (mobile: stack) */
-  .omuda-item {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
   }
 
-  /* Number + subheading row */
-  .omuda-feature-row {
+  .step-wrapper + .step-wrapper {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid rgba(35,31,35,0.1);
+  }
+
+  /* Nav esquerdo: oculto no mobile */
+  .omuda-nav { display: none; }
+
+  /* Cabeçalho mobile (número + título por step) */
+  .step-mobile-header {
     display: flex;
     align-items: flex-start;
     gap: 1.25rem;
   }
 
+  /* Tipografia compartilhada (mobile + nav desktop) */
   .step-num {
     font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 2.5rem);
-    color: var(--color-brand);
     letter-spacing: -0.05em;
     line-height: 1;
     white-space: nowrap;
@@ -196,17 +214,19 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 
   .step-sub {
     font-family: var(--font-display);
-    font-size: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
-    color: var(--color-ink);
+    font-size: clamp(1.125rem, 0.9rem + 1.2vw, 1.75rem);
     line-height: 1.35;
     letter-spacing: -0.02em;
     font-weight: 400;
   }
 
-  /* Center spacer: hidden on mobile */
-  .omuda-center-spacer { display: none; }
+  /* Cores mobile (sem estado ativo/inativo) */
+  .step-mobile-header .step-num { color: var(--color-brand); }
+  .step-mobile-header .step-sub { color: var(--color-ink); }
 
   /* Bullets */
+  .omuda-bullets { width: 100%; }
+
   .omuda-right {
     list-style: none;
     margin: 0;
@@ -247,11 +267,9 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     line-height: 1.5;
   }
 
-  .bullet-text strong {
-    font-weight: 600;
-  }
+  .bullet-text strong { font-weight: 600; }
 
-  /* Visual card (mobile: full-width aspect-ratio) */
+  /* Visual card: mobile = 16:9 */
   .omuda-visual {
     position: relative;
     border-radius: 1.5rem;
@@ -272,26 +290,18 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     DESKTOP (≥64rem) — sticky stack, clip-path transitions
+     DESKTOP (≥64rem) — nav permanente + bullets absolutos à direita
   ═══════════════════════════════════════════════════════════════════ */
 
   @media (min-width: 64rem) {
 
-    .omuda-header {
-      margin-bottom: clamp(2rem, 2.7vw, 2.5rem);
-    }
-
-    .omuda-heading {
-      font-size: clamp(1.75rem, 1.2rem + 2vw, 2.25rem);
-    }
-
-    /* Stage: contentor relativo — os absolutes são relativos a ele */
+    /* Stage: altura fixa para os absolutos */
     .omuda-stage {
       position: relative;
       height: clamp(300px, 26vw, 376px);
     }
 
-    /* Step wrappers: sem borda, sem gap (layout em absoluto) */
+    /* Step wrappers: sem borda/gap (não participam do layout desktop) */
     .step-wrapper {
       flex-direction: row;
       gap: 0;
@@ -302,14 +312,50 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       border-top: none;
     }
 
-    /* Items: empilhados absolutamente, full-width, flex-row interno */
+    /* ── NAV ESQUERDO ──────────────────────────────────────────────── */
+    .omuda-nav {
+      display: flex !important;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: clamp(220px, 32vw, 460px);
+    }
+
+    .step-nav-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    /* Transição suave de cor ao alternar ativo/inativo */
+    .step-nav-row .step-num,
+    .step-nav-row .step-sub {
+      transition: color 0.5s ease;
+    }
+
+    /* Ativo */
+    .step-nav-row[data-active] .step-num { color: var(--color-brand); }
+    .step-nav-row[data-active] .step-sub { color: var(--color-ink); }
+
+    /* Inativo */
+    .step-nav-row:not([data-active]) .step-num,
+    .step-nav-row:not([data-active]) .step-sub {
+      color: rgba(35, 31, 35, 0.30);
+    }
+
+    /* Cabeçalhos mobile ocultos */
+    .step-mobile-header { display: none; }
+
+    /* ── BULLETS: coluna direita absoluta ─────────────────────────── */
     [data-omuda-item] {
       position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: clamp(2rem, 5.5vw, 5rem);
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: clamp(220px, 32vw, 464px);
       /* Inicial: invisível — GSAP controla via autoAlpha */
       opacity: 0;
       visibility: hidden;
@@ -321,40 +367,7 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       visibility: visible;
     }
 
-    .omuda-left {
-      width: clamp(220px, 32vw, 460px);
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .omuda-feature-row {
-      align-items: center;
-    }
-
-    .step-num {
-      font-size: clamp(2rem, 2.8vw, 2.5rem);
-    }
-
-    .step-sub {
-      font-size: clamp(1.25rem, 1.9vw, 1.75rem);
-    }
-
-    /* Espaçador central: cresce para reservar espaço do visual */
-    .omuda-center-spacer {
-      display: block;
-      flex: 1 0 0;
-      min-width: 0;
-    }
-
-    .omuda-right {
-      width: clamp(220px, 32vw, 464px);
-      flex-shrink: 0;
-      justify-content: center;
-    }
-
-    /* Visuais: empilhados, centrados sobre o espaçador */
+    /* ── VISUAIS: centrados absolutamente ─────────────────────────── */
     [data-omuda-visual] {
       position: absolute;
       left: 50%;
@@ -362,17 +375,19 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       transform: translate(-50%, -50%);
       width: clamp(200px, 21vw, 300px);
       height: clamp(200px, 21vw, 300px);
-      aspect-ratio: auto; /* override do mobile */
+      aspect-ratio: auto;
     }
 
-    /* Estado inicial dos visuais — GSAP aplica clip-path definitivo no DOMContentLoaded.
-       O primeiro já fica aberto; o segundo fechado para evitar flash antes do GSAP. */
     .step-wrapper:first-child [data-omuda-visual] {
       clip-path: inset(0% round 0.75em);
     }
     .step-wrapper:not(:first-child) [data-omuda-visual] {
       clip-path: inset(50% round 0.75em);
     }
+
+    /* Ajuste tipográfico desktop */
+    .step-num { font-size: clamp(2rem, 2.8vw, 2.5rem); }
+    .step-sub { font-size: clamp(1.125rem, 1.7vw, 1.75rem); }
 
   }
 
@@ -386,6 +401,10 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     [data-omuda-visual] {
       clip-path: none !important;
     }
+    .step-nav-row .step-num,
+    .step-nav-row .step-sub {
+      transition: none;
+    }
   }
 </style>
 
@@ -395,7 +414,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Sincroniza com o Lenis global (padrão do projeto — ver StickyFeatures.astro)
   const lenis = (window as any).__lenis;
   if (lenis) lenis.on('scroll', ScrollTrigger.update);
 
@@ -405,6 +423,7 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 
     const visualWraps = Array.from(wrap.querySelectorAll<HTMLElement>('[data-omuda-visual]'));
     const items       = Array.from(wrap.querySelectorAll<HTMLElement>('[data-omuda-item]'));
+    const navSteps    = Array.from(wrap.querySelectorAll<HTMLElement>('[data-omuda-nav-step]'));
 
     const count = Math.min(visualWraps.length, items.length);
     if (count < 1) return;
@@ -425,9 +444,20 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       gsap.set(v, { clipPath: 'inset(50% round 0.75em)' })
     );
 
+    // Nav: primeiro step ativo (o HTML já tem data-active, mas reforçamos)
+    navSteps[0]?.setAttribute('data-active', '');
+
     let currentIndex = 0;
 
-    // ── Animações de transição ────────────────────────────────────────
+    // Alterna o estado ativo no nav esquerdo (via CSS transition: color)
+    function setActiveNav(toIdx: number) {
+      navSteps.forEach((el, i) => {
+        if (i === toIdx) el.setAttribute('data-active', '');
+        else el.removeAttribute('data-active');
+      });
+    }
+
+    // ── Animações de transição dos bullets ───────────────────────────
     function animateOut(itemEl: HTMLElement) {
       const texts = getTexts(itemEl);
       gsap.to(texts, {
@@ -454,14 +484,12 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       const tl = gsap.timeline({ defaults: { overwrite: 'auto' } });
 
       if (fromIndex < toIndex) {
-        // Avança: revela o próximo visual (clip abre de cima)
         tl.to(visualWraps[toIndex], {
           clipPath: 'inset(0% round 0.75em)',
           duration: DURATION,
           ease: EASE,
         }, 0);
       } else {
-        // Volta: fecha o visual atual (clip fecha de cima)
         tl.to(visualWraps[fromIndex], {
           clipPath: 'inset(50% round 0.75em)',
           duration: DURATION,
@@ -471,11 +499,11 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 
       animateOut(items[fromIndex]);
       animateIn(items[toIndex]);
+      setActiveNav(toIndex);
     }
 
-    const steps = Math.max(1, count - 1); // = 1 para 2 passos
+    const steps = Math.max(1, count - 1);
 
-    // ── Desktop only (≥64rem), sem reduced-motion ─────────────────────
     const mm = gsap.matchMedia();
     mm.add(
       '(min-width: 64rem) and (prefers-reduced-motion: no-preference)',
