@@ -75,10 +75,10 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
           <Image
             src={walletImg}
             alt="Ícone de carteira dourado sobre fundo verde escuro"
-            widths={[400, 640, 900]}
+            widths={[600, 900, 1200]}
             sizes="(min-width: 64rem) 300px, 90vw"
-            format="webp"
-            quality={95}
+            format="avif"
+            quality={90}
             class="omuda-visual-img"
             loading="lazy"
             decoding="async"
@@ -122,10 +122,10 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
           <Image
             src={govImg}
             alt="Ícone de prédio governamental dourado sobre fundo verde escuro"
-            widths={[400, 640, 900]}
+            widths={[600, 900, 1200]}
             sizes="(min-width: 64rem) 300px, 90vw"
-            format="webp"
-            quality={95}
+            format="avif"
+            quality={90}
             class="omuda-visual-img"
             loading="lazy"
             decoding="async"
@@ -134,11 +134,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       </div>
 
     </div><!-- /.omuda-stage -->
-
-    <!-- Progress bar (só desktop, durante o pin) -->
-    <div class="omuda-progress-track">
-      <div data-omuda-progress class="omuda-progress-fill"></div>
-    </div>
 
   </div>
 </section>
@@ -276,25 +271,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     display: block;
   }
 
-  /* Progress bar (hidden on mobile) */
-  .omuda-progress-track {
-    display: none;
-    height: 2px;
-    background: var(--color-surface);
-    border-radius: 999px;
-    overflow: hidden;
-    margin-top: clamp(1.5rem, 2vw, 2rem);
-  }
-
-  .omuda-progress-fill {
-    height: 100%;
-    width: 100%;
-    background: var(--color-brand);
-    transform-origin: left;
-    transform: scaleX(0);
-    border-radius: 999px;
-  }
-
   /* ═══════════════════════════════════════════════════════════════════
      DESKTOP (≥64rem) — sticky stack, clip-path transitions
   ═══════════════════════════════════════════════════════════════════ */
@@ -398,11 +374,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       clip-path: inset(50% round 0.75em);
     }
 
-    /* Progress bar visível no desktop */
-    .omuda-progress-track {
-      display: block;
-    }
-
   }
 
   /* ── Acessibilidade ──────────────────────────────────────────────── */
@@ -414,9 +385,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     }
     [data-omuda-visual] {
       clip-path: none !important;
-    }
-    .omuda-progress-track {
-      display: none;
     }
   }
 </style>
@@ -437,7 +405,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 
     const visualWraps = Array.from(wrap.querySelectorAll<HTMLElement>('[data-omuda-visual]'));
     const items       = Array.from(wrap.querySelectorAll<HTMLElement>('[data-omuda-item]'));
-    const progressBar = wrap.querySelector<HTMLElement>('[data-omuda-progress]');
 
     const count = Math.min(visualWraps.length, items.length);
     if (count < 1) return;
@@ -524,8 +491,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
             const p   = Math.min(self.progress, SCROLL_AMOUNT) / SCROLL_AMOUNT;
             let   idx = Math.floor(p * steps + 1e-6);
             idx = Math.max(0, Math.min(steps, idx));
-
-            if (progressBar) gsap.to(progressBar, { scaleX: p, ease: 'none', overwrite: 'auto' });
 
             if (idx !== currentIndex) {
               transition(currentIndex, idx);
