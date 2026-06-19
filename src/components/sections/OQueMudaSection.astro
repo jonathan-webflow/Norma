@@ -1,0 +1,541 @@
+---
+// Seção "O Que Muda" — sticky scroll com 2 passos (Figma 901:4161 e 901:4193).
+// Referência de animação: osmo-sticky-features.webflow.io (script adaptado abaixo).
+// Desktop (≥64rem): seção pina no centro da viewport; scroll extra troca o step
+// via clip-path no visual e fade+y nos textos. Mobile: estático, ambos os steps visíveis.
+import { Image } from 'astro:assets';
+import walletImg from '../../assets/images/tiles/omuda-wallet.png';
+import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
+---
+
+<section data-omuda-wrap class="omuda-section bg-canvas py-section">
+  <div class="mx-auto max-w-container px-gutter">
+
+    <!-- ── STATIC HEADER (permanece visível durante o pin) ─────────── -->
+    <div class="omuda-header">
+
+      <!-- Eyebrow pill -->
+      <div class="inline-flex items-center gap-2.5 bg-[#f0f0ea] px-3 py-2 rounded-[0.5rem]">
+        <svg class="w-4 h-4 shrink-0 text-brand" viewBox="0 0 16 16" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.3541 10.854L11.3541 12.854C11.2603 12.9478 11.1331 13.0006 11.0004 13.0006C10.8677 13.0006 10.7405 12.9478 10.6466 12.854C10.5528 12.7602 10.5001 12.633 10.5001 12.5003C10.5001 12.3676 10.5528 12.2403 10.6466 12.1465L11.7935 11.0003H3.00039C2.86779 11.0003 2.74061 10.9476 2.64684 10.8538C2.55307 10.7601 2.50039 10.6329 2.50039 10.5003C2.50039 10.3677 2.55307 10.2405 2.64684 10.1467C2.74061 10.053 2.86779 10.0003 3.00039 10.0003H11.7935L10.6466 8.85403C10.5528 8.76021 10.5001 8.63296 10.5001 8.50028C10.5001 8.3676 10.5528 8.24035 10.6466 8.14653C10.7405 8.05271 10.8677 8 11.0004 8C11.1331 8 11.2603 8.05271 11.3541 8.14653L13.3541 10.1465C13.4006 10.193 13.4375 10.2481 13.4627 10.3088C13.4878 10.3695 13.5008 10.4346 13.5008 10.5003C13.5008 10.566 13.4878 10.631 13.4627 10.6917C13.4375 10.7524 13.4006 10.8076 13.3541 10.854ZM4.64664 6.85403C4.74046 6.94785 4.86771 7.00056 5.00039 7.00056C5.13308 7.00056 5.26032 6.94785 5.35414 6.85403C5.44796 6.76021 5.50067 6.63296 5.50067 6.50028C5.50067 6.3676 5.44796 6.24035 5.35414 6.14653L4.20727 5.00028H13.0004C13.133 5.00028 13.2602 4.9476 13.3539 4.85383C13.4477 4.76006 13.5004 4.63289 13.5004 4.50028C13.5004 4.36767 13.4477 4.24049 13.3539 4.14672C13.2602 4.05296 13.133 4.00028 13.0004 4.00028H4.20727L5.35414 2.85403C5.44796 2.76021 5.50067 2.63296 5.50067 2.50028C5.50067 2.3676 5.44796 2.24035 5.35414 2.14653C5.26032 2.05271 5.13308 2 5.00039 2C4.86771 2 4.74046 2.05271 4.64664 2.14653L2.64664 4.14653C2.60016 4.19296 2.56328 4.24811 2.53811 4.30881C2.51295 4.36951 2.5 4.43457 2.5 4.50028C2.5 4.56599 2.51295 4.63105 2.53811 4.69175C2.56328 4.75245 2.60016 4.80759 2.64664 4.85403L4.64664 6.85403Z" fill="currentColor"/>
+        </svg>
+        <span class="font-display text-label text-brand uppercase tracking-[0.02em]">O QUE MUDA</span>
+      </div>
+
+      <!-- H2 principal -->
+      <h2 class="omuda-heading font-display font-light text-ink text-center leading-[1.4] tracking-[-0.01em]">
+        Na Reforma sua margem depende do fornecedor recolher e do governo apurar o imposto corretamente
+      </h2>
+    </div>
+
+    <!-- ── DYNAMIC STAGE ──────────────────────────────────────────────
+         Desktop: os [data-omuda-item] e [data-omuda-visual] são posicionados
+         absolutamente dentro do stage. O step-wrapper é semântico mas não cria
+         contexto de posicionamento — os filhos escapam para o stage.
+         Mobile: step-wrappers empilham flex-column, tudo em fluxo normal.
+    ─────────────────────────────────────────────────────────────────── -->
+    <div class="omuda-stage">
+
+      <!-- ══ STEP 01 ══════════════════════════════════════════════════ -->
+      <div class="step-wrapper">
+
+        <div data-omuda-item class="omuda-item">
+          <!-- Esquerda: número + sub-heading lado a lado -->
+          <div class="omuda-left">
+            <div class="omuda-feature-row">
+              <span data-omuda-text class="step-num">01</span>
+              <h3 data-omuda-text class="step-sub">O crédito passa a ser financeiro, não mais escritural</h3>
+            </div>
+          </div>
+          <!-- Espaçador central (desktop) — reserva o espaço do visual -->
+          <div class="omuda-center-spacer" aria-hidden="true"></div>
+          <!-- Direita: bullets -->
+          <ul class="omuda-right">
+            <li data-omuda-text class="bullet-item">
+              <span class="bullet-badge" aria-hidden="true">
+                <svg class="bullet-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.75 18.375C13.75 18.7458 13.64 19.1084 13.434 19.4167C13.228 19.725 12.9351 19.9654 12.5925 20.1073C12.2499 20.2492 11.8729 20.2863 11.5092 20.214C11.1455 20.1416 10.8114 19.963 10.5492 19.7008C10.287 19.4386 10.1084 19.1045 10.036 18.7408C9.96368 18.3771 10.0008 18.0001 10.1427 17.6575C10.2846 17.3149 10.525 17.022 10.8333 16.816C11.1416 16.61 11.5042 16.5 11.875 16.5C12.3723 16.5 12.8492 16.6975 13.2008 17.0492C13.5525 17.4008 13.75 17.8777 13.75 18.375ZM11.875 14.625C12.1734 14.625 12.4595 14.5065 12.6705 14.2955C12.8815 14.0845 13 13.7984 13 13.5V4.125C13 3.82663 12.8815 3.54048 12.6705 3.3295C12.4595 3.11853 12.1734 3 11.875 3C11.5766 3 11.2905 3.11853 11.0795 3.3295C10.8685 3.54048 10.75 3.82663 10.75 4.125V13.5C10.75 13.7984 10.8685 14.0845 11.0795 14.2955C11.2905 14.5065 11.5766 14.625 11.875 14.625Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <p class="bullet-text">Se o fornecedor <strong>não recolher</strong> o imposto, a sua margem é diretamente impactada pela perda do crédito</p>
+            </li>
+            <li data-omuda-text class="bullet-item">
+              <span class="bullet-badge" aria-hidden="true">
+                <svg class="bullet-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.75 18.375C13.75 18.7458 13.64 19.1084 13.434 19.4167C13.228 19.725 12.9351 19.9654 12.5925 20.1073C12.2499 20.2492 11.8729 20.2863 11.5092 20.214C11.1455 20.1416 10.8114 19.963 10.5492 19.7008C10.287 19.4386 10.1084 19.1045 10.036 18.7408C9.96368 18.3771 10.0008 18.0001 10.1427 17.6575C10.2846 17.3149 10.525 17.022 10.8333 16.816C11.1416 16.61 11.5042 16.5 11.875 16.5C12.3723 16.5 12.8492 16.6975 13.2008 17.0492C13.5525 17.4008 13.75 17.8777 13.75 18.375ZM11.875 14.625C12.1734 14.625 12.4595 14.5065 12.6705 14.2955C12.8815 14.0845 13 13.7984 13 13.5V4.125C13 3.82663 12.8815 3.54048 12.6705 3.3295C12.4595 3.11853 12.1734 3 11.875 3C11.5766 3 11.2905 3.11853 11.0795 3.3295C10.8685 3.54048 10.75 3.82663 10.75 4.125V13.5C10.75 13.7984 10.8685 14.0845 11.0795 14.2955C11.2905 14.5065 11.5766 14.625 11.875 14.625Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <p class="bullet-text">Se ele pagar <strong>atrasado</strong>, seu capital de giro vai ser impactado pela demora na entrada do crédito</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Visual 01 -->
+        <div data-omuda-visual class="omuda-visual">
+          <Image
+            src={walletImg}
+            alt="Ícone de carteira dourado sobre fundo verde escuro"
+            widths={[400, 640, 900]}
+            sizes="(min-width: 64rem) 300px, 90vw"
+            format="webp"
+            quality={95}
+            class="omuda-visual-img"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+
+      <!-- ══ STEP 02 ══════════════════════════════════════════════════ -->
+      <div class="step-wrapper">
+
+        <div data-omuda-item class="omuda-item">
+          <div class="omuda-left">
+            <div class="omuda-feature-row">
+              <span data-omuda-text class="step-num">02</span>
+              <h3 data-omuda-text class="step-sub">A apuração do imposto passa a ser feita pelo governo</h3>
+            </div>
+          </div>
+          <div class="omuda-center-spacer" aria-hidden="true"></div>
+          <ul class="omuda-right">
+            <li data-omuda-text class="bullet-item">
+              <span class="bullet-badge" aria-hidden="true">
+                <svg class="bullet-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.75 18.375C13.75 18.7458 13.64 19.1084 13.434 19.4167C13.228 19.725 12.9351 19.9654 12.5925 20.1073C12.2499 20.2492 11.8729 20.2863 11.5092 20.214C11.1455 20.1416 10.8114 19.963 10.5492 19.7008C10.287 19.4386 10.1084 19.1045 10.036 18.7408C9.96368 18.3771 10.0008 18.0001 10.1427 17.6575C10.2846 17.3149 10.525 17.022 10.8333 16.816C11.1416 16.61 11.5042 16.5 11.875 16.5C12.3723 16.5 12.8492 16.6975 13.2008 17.0492C13.5525 17.4008 13.75 17.8777 13.75 18.375ZM11.875 14.625C12.1734 14.625 12.4595 14.5065 12.6705 14.2955C12.8815 14.0845 13 13.7984 13 13.5V4.125C13 3.82663 12.8815 3.54048 12.6705 3.3295C12.4595 3.11853 12.1734 3 11.875 3C11.5766 3 11.2905 3.11853 11.0795 3.3295C10.8685 3.54048 10.75 3.82663 10.75 4.125V13.5C10.75 13.7984 10.8685 14.0845 11.0795 14.2955C11.2905 14.5065 11.5766 14.625 11.875 14.625Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <p class="bullet-text">Erros na apuração do governo, como ocorreu com o IRPF 2026, não contestados a tempo viram imposto a maior ou risco fiscal</p>
+            </li>
+            <li data-omuda-text class="bullet-item">
+              <span class="bullet-badge" aria-hidden="true">
+                <svg class="bullet-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.75 18.375C13.75 18.7458 13.64 19.1084 13.434 19.4167C13.228 19.725 12.9351 19.9654 12.5925 20.1073C12.2499 20.2492 11.8729 20.2863 11.5092 20.214C11.1455 20.1416 10.8114 19.963 10.5492 19.7008C10.287 19.4386 10.1084 19.1045 10.036 18.7408C9.96368 18.3771 10.0008 18.0001 10.1427 17.6575C10.2846 17.3149 10.525 17.022 10.8333 16.816C11.1416 16.61 11.5042 16.5 11.875 16.5C12.3723 16.5 12.8492 16.6975 13.2008 17.0492C13.5525 17.4008 13.75 17.8777 13.75 18.375ZM11.875 14.625C12.1734 14.625 12.4595 14.5065 12.6705 14.2955C12.8815 14.0845 13 13.7984 13 13.5V4.125C13 3.82663 12.8815 3.54048 12.6705 3.3295C12.4595 3.11853 12.1734 3 11.875 3C11.5766 3 11.2905 3.11853 11.0795 3.3295C10.8685 3.54048 10.75 3.82663 10.75 4.125V13.5C10.75 13.7984 10.8685 14.0845 11.0795 14.2955C11.2905 14.5065 11.5766 14.625 11.875 14.625Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <p class="bullet-text">Documento fiscal vira confissão de dívida — erros de cadastro são mais graves e difíceis de corrigir</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Visual 02 -->
+        <div data-omuda-visual class="omuda-visual">
+          <Image
+            src={govImg}
+            alt="Ícone de prédio governamental dourado sobre fundo verde escuro"
+            widths={[400, 640, 900]}
+            sizes="(min-width: 64rem) 300px, 90vw"
+            format="webp"
+            quality={95}
+            class="omuda-visual-img"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+
+    </div><!-- /.omuda-stage -->
+
+    <!-- Progress bar (só desktop, durante o pin) -->
+    <div class="omuda-progress-track">
+      <div data-omuda-progress class="omuda-progress-fill"></div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     BASE (mobile-first)
+  ═══════════════════════════════════════════════════════════════════ */
+
+  .omuda-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: clamp(2rem, 2.7vw, 2.5rem);
+  }
+
+  .omuda-heading {
+    font-size: clamp(1.5rem, 1rem + 2.5vw, 2rem);
+    max-width: 50rem;
+    letter-spacing: -0.01em;
+  }
+
+  /* Step wrappers: mobile = flex-column, each step shows top-to-bottom */
+  .step-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .step-wrapper + .step-wrapper {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid #e0e0e0;
+  }
+
+  /* Item inner layout (mobile: stack) */
+  .omuda-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Number + subheading row */
+  .omuda-feature-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .step-num {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    color: var(--color-brand);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .step-sub {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
+    color: var(--color-ink);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+
+  /* Center spacer: hidden on mobile */
+  .omuda-center-spacer { display: none; }
+
+  /* Bullets */
+  .omuda-right {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .bullet-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .bullet-badge {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
+    background: #e5e5e0;
+    border-radius: 0.333rem;
+    color: var(--color-brand);
+  }
+
+  .bullet-icon-svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .bullet-text {
+    font-family: var(--font-sans, sans-serif);
+    font-size: clamp(0.9375rem, 0.875rem + 0.3vw, 1.125rem);
+    color: var(--color-ink);
+    line-height: 1.5;
+  }
+
+  .bullet-text strong {
+    font-weight: 600;
+  }
+
+  /* Visual card (mobile: full-width aspect-ratio) */
+  .omuda-visual {
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background: #1c2e1a;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+  }
+
+  .omuda-visual-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  /* Progress bar (hidden on mobile) */
+  .omuda-progress-track {
+    display: none;
+    height: 2px;
+    background: var(--color-surface);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: clamp(1.5rem, 2vw, 2rem);
+  }
+
+  .omuda-progress-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--color-brand);
+    transform-origin: left;
+    transform: scaleX(0);
+    border-radius: 999px;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     DESKTOP (≥64rem) — sticky stack, clip-path transitions
+  ═══════════════════════════════════════════════════════════════════ */
+
+  @media (min-width: 64rem) {
+
+    .omuda-header {
+      margin-bottom: clamp(2rem, 2.7vw, 2.5rem);
+    }
+
+    .omuda-heading {
+      font-size: clamp(1.75rem, 1.2rem + 2vw, 2.25rem);
+    }
+
+    /* Stage: contentor relativo — os absolutes são relativos a ele */
+    .omuda-stage {
+      position: relative;
+      height: clamp(300px, 26vw, 376px);
+    }
+
+    /* Step wrappers: sem borda, sem gap (layout em absoluto) */
+    .step-wrapper {
+      flex-direction: row;
+      gap: 0;
+    }
+    .step-wrapper + .step-wrapper {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    /* Items: empilhados absolutamente, full-width, flex-row interno */
+    [data-omuda-item] {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: clamp(2rem, 5.5vw, 5rem);
+      /* Inicial: invisível — GSAP controla via autoAlpha */
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Primeiro step visível antes do GSAP iniciar */
+    .step-wrapper:first-child [data-omuda-item] {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .omuda-left {
+      width: clamp(220px, 32vw, 460px);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .omuda-feature-row {
+      align-items: center;
+    }
+
+    .step-num {
+      font-size: clamp(2rem, 2.8vw, 2.5rem);
+    }
+
+    .step-sub {
+      font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+    }
+
+    /* Espaçador central: cresce para reservar espaço do visual */
+    .omuda-center-spacer {
+      display: block;
+      flex: 1 0 0;
+      min-width: 0;
+    }
+
+    .omuda-right {
+      width: clamp(220px, 32vw, 464px);
+      flex-shrink: 0;
+      justify-content: center;
+    }
+
+    /* Visuais: empilhados, centrados sobre o espaçador */
+    [data-omuda-visual] {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(200px, 21vw, 300px);
+      height: clamp(200px, 21vw, 300px);
+      aspect-ratio: auto; /* override do mobile */
+    }
+
+    /* Estado inicial dos visuais — GSAP aplica clip-path definitivo no DOMContentLoaded.
+       O primeiro já fica aberto; o segundo fechado para evitar flash antes do GSAP. */
+    .step-wrapper:first-child [data-omuda-visual] {
+      clip-path: inset(0% round 0.75em);
+    }
+    .step-wrapper:not(:first-child) [data-omuda-visual] {
+      clip-path: inset(50% round 0.75em);
+    }
+
+    /* Progress bar visível no desktop */
+    .omuda-progress-track {
+      display: block;
+    }
+
+  }
+
+  /* ── Acessibilidade ──────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    [data-omuda-item],
+    .step-wrapper:first-child [data-omuda-item] {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    [data-omuda-visual] {
+      clip-path: none !important;
+    }
+    .omuda-progress-track {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Sincroniza com o Lenis global (padrão do projeto — ver StickyFeatures.astro)
+  const lenis = (window as any).__lenis;
+  if (lenis) lenis.on('scroll', ScrollTrigger.update);
+
+  function initOQueMuda() {
+    const wrap = document.querySelector<HTMLElement>('[data-omuda-wrap]');
+    if (!wrap) return;
+
+    const visualWraps = Array.from(wrap.querySelectorAll<HTMLElement>('[data-omuda-visual]'));
+    const items       = Array.from(wrap.querySelectorAll<HTMLElement>('[data-omuda-item]'));
+    const progressBar = wrap.querySelector<HTMLElement>('[data-omuda-progress]');
+
+    const count = Math.min(visualWraps.length, items.length);
+    if (count < 1) return;
+
+    const rm       = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const DURATION = rm ? 0.01 : 0.75;
+    const EASE     = 'power4.inOut';
+    const SCROLL_AMOUNT = 0.9;
+
+    const getTexts = (el: HTMLElement) =>
+      Array.from(el.querySelectorAll<HTMLElement>('[data-omuda-text]'));
+
+    // ── Estado inicial ────────────────────────────────────────────────
+    gsap.set(visualWraps[0], { clipPath: 'inset(0% round 0.75em)' });
+    gsap.set(items[0], { autoAlpha: 1 });
+
+    visualWraps.slice(1).forEach(v =>
+      gsap.set(v, { clipPath: 'inset(50% round 0.75em)' })
+    );
+
+    let currentIndex = 0;
+
+    // ── Animações de transição ────────────────────────────────────────
+    function animateOut(itemEl: HTMLElement) {
+      const texts = getTexts(itemEl);
+      gsap.to(texts, {
+        autoAlpha: 0,
+        y: -30,
+        ease: 'power4.out',
+        duration: 0.4,
+        onComplete: () => gsap.set(itemEl, { autoAlpha: 0 }),
+      });
+    }
+
+    function animateIn(itemEl: HTMLElement) {
+      const texts = getTexts(itemEl);
+      gsap.set(itemEl, { autoAlpha: 1 });
+      gsap.fromTo(
+        texts,
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, ease: 'power4.out', duration: DURATION, stagger: 0.08 }
+      );
+    }
+
+    function transition(fromIndex: number, toIndex: number) {
+      if (fromIndex === toIndex) return;
+      const tl = gsap.timeline({ defaults: { overwrite: 'auto' } });
+
+      if (fromIndex < toIndex) {
+        // Avança: revela o próximo visual (clip abre de cima)
+        tl.to(visualWraps[toIndex], {
+          clipPath: 'inset(0% round 0.75em)',
+          duration: DURATION,
+          ease: EASE,
+        }, 0);
+      } else {
+        // Volta: fecha o visual atual (clip fecha de cima)
+        tl.to(visualWraps[fromIndex], {
+          clipPath: 'inset(50% round 0.75em)',
+          duration: DURATION,
+          ease: EASE,
+        }, 0);
+      }
+
+      animateOut(items[fromIndex]);
+      animateIn(items[toIndex]);
+    }
+
+    const steps = Math.max(1, count - 1); // = 1 para 2 passos
+
+    // ── Desktop only (≥64rem), sem reduced-motion ─────────────────────
+    const mm = gsap.matchMedia();
+    mm.add(
+      '(min-width: 64rem) and (prefers-reduced-motion: no-preference)',
+      () => {
+        ScrollTrigger.create({
+          trigger: wrap,
+          start: 'center center',
+          end: () => `+=${steps * 100}%`,
+          pin: true,
+          scrub: true,
+          invalidateOnRefresh: true,
+          onUpdate: self => {
+            const p   = Math.min(self.progress, SCROLL_AMOUNT) / SCROLL_AMOUNT;
+            let   idx = Math.floor(p * steps + 1e-6);
+            idx = Math.max(0, Math.min(steps, idx));
+
+            if (progressBar) gsap.to(progressBar, { scaleX: p, ease: 'none', overwrite: 'auto' });
+
+            if (idx !== currentIndex) {
+              transition(currentIndex, idx);
+              currentIndex = idx;
+            }
+          },
+        });
+      }
+    );
+  }
+
+  document.addEventListener('DOMContentLoaded', initOQueMuda);
+</script>
