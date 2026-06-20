@@ -23,7 +23,7 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 
       <!-- H2: 2 linhas conforme Figma (br forçado no ponto natural de quebra) -->
       <h2 class="omuda-heading font-display font-light text-ink text-center leading-[1.4] tracking-[-0.01em]">
-        Na Reforma sua margem depende do fornecedor<br>
+        Na Reforma sua margem depende do fornecedor<br class="omuda-br">
         recolher e do governo apurar o imposto corretamente
       </h2>
     </div>
@@ -199,7 +199,7 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
   /* Tipografia compartilhada (mobile + nav desktop) */
   .step-num {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
     letter-spacing: -0.05em;
     line-height: 1;
     white-space: nowrap;
@@ -263,13 +263,13 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 
   .bullet-text strong { font-weight: 600; }
 
-  /* Visual card: mobile = 16:9 */
+  /* Visual card: mobile = 4:3 */
   .omuda-visual {
     position: relative;
     border-radius: 1.5rem;
     overflow: hidden;
     background: #1c2e1a;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     width: 100%;
   }
 
@@ -283,6 +283,26 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     display: block;
   }
 
+  /* Quebra de linha do H2: apenas desktop */
+  .omuda-br { display: none; }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TABLET (48rem–64rem) — grid 2-col por step: texto+bullets | visual
+  ═══════════════════════════════════════════════════════════════════ */
+
+  @media (min-width: 48rem) and (max-width: 63.999rem) {
+    .step-wrapper {
+      display: grid;
+      grid-template-columns: 1fr clamp(180px, 30vw, 260px);
+      grid-template-rows: auto 1fr;
+      gap: 1.5rem 2.5rem;
+      align-items: start;
+    }
+    .step-mobile-header { grid-column: 1; grid-row: 1; }
+    [data-omuda-visual]  { grid-column: 2; grid-row: 1 / 3; aspect-ratio: 1; width: 100%; }
+    [data-omuda-item]    { grid-column: 1; grid-row: 2; width: 100%; }
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      DESKTOP (≥64rem) — nav permanente + bullets absolutos à direita
   ═══════════════════════════════════════════════════════════════════ */
@@ -292,7 +312,7 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     /* Stage: altura fixa para os absolutos */
     .omuda-stage {
       position: relative;
-      height: clamp(300px, 26vw, 376px);
+      height: clamp(360px, 28vw, 420px);
     }
 
     /* Step wrappers: sem borda/gap (não participam do layout desktop) */
@@ -315,7 +335,7 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       top: 50%;
       left: 0;
       transform: translateY(-50%);
-      width: clamp(220px, 32vw, 460px);
+      width: clamp(200px, 28vw, 460px);
     }
 
     .step-nav-row {
@@ -349,7 +369,7 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
       right: 0;
       top: 50%;
       transform: translateY(-50%);
-      width: clamp(220px, 32vw, 464px);
+      width: clamp(200px, 28vw, 464px);
       /* Inicial: invisível — GSAP controla via autoAlpha */
       opacity: 0;
       visibility: hidden;
@@ -382,6 +402,9 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     /* Ajuste tipográfico desktop */
     .step-num { font-size: clamp(2rem, 2.8vw, 2.5rem); }
     .step-sub { font-size: clamp(1.125rem, 1.7vw, 1.75rem); }
+
+    /* Reativa a quebra de linha do H2 no desktop */
+    .omuda-br { display: inline; }
 
   }
 
@@ -429,14 +452,6 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
 
     const getTexts = (el: HTMLElement) =>
       Array.from(el.querySelectorAll<HTMLElement>('[data-omuda-text]'));
-
-    // ── Estado inicial ────────────────────────────────────────────────
-    gsap.set(visualWraps[0], { clipPath: 'inset(0% round 0.75em)' });
-    gsap.set(items[0], { autoAlpha: 1 });
-
-    visualWraps.slice(1).forEach(v =>
-      gsap.set(v, { clipPath: 'inset(50% round 0.75em)' })
-    );
 
     // Nav: primeiro step ativo (o HTML já tem data-active, mas reforçamos)
     navSteps[0]?.setAttribute('data-active', '');
@@ -502,6 +517,13 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     mm.add(
       '(min-width: 64rem) and (prefers-reduced-motion: no-preference)',
       () => {
+        // Estado inicial do clip-path: apenas no desktop (matchMedia reverte ao sair)
+        gsap.set(visualWraps[0], { clipPath: 'inset(0% round 0.75em)' });
+        gsap.set(items[0], { autoAlpha: 1 });
+        visualWraps.slice(1).forEach(v =>
+          gsap.set(v, { clipPath: 'inset(50% round 0.75em)' })
+        );
+
         ScrollTrigger.create({
           trigger: wrap,
           start: 'center center',
