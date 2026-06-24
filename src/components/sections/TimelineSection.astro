@@ -1,0 +1,539 @@
+---
+// Seção "O tempo para se preparar está acabando" (Figma 958:988)
+// Timeline vertical da Reforma Tributária (JAN 2025 → JAN 2027).
+// Layout 2 colunas: esquerda sticky (título + CTA) | direita trilho + itens.
+// Animação de scroll: linha de progresso verde (scrub), "pop" dos marcadores e reveal dos itens.
+
+type Status = 'done' | 'current' | 'future' | 'end';
+
+interface TimelineItem {
+  date?: string;
+  title: string;
+  desc?: string;
+  status: Status;
+}
+
+const TIMELINE: TimelineItem[] = [
+  {
+    date: 'JAN 2025',
+    title: 'LC 214/2025',
+    desc: 'Institui IBS, CBS e Imposto Seletivo e estrutura a transição',
+    status: 'done',
+  },
+  {
+    date: 'JAN 2026',
+    title: 'LC 227/2026',
+    desc: 'Cria o Comitê Gestor do IBS e fecha a etapa legislativa da Reforma',
+    status: 'done',
+  },
+  {
+    date: 'JAN 2026',
+    title: 'Início do período de teste',
+    desc: 'Apuração de IBS e CBS já roda em paralelo',
+    status: 'done',
+  },
+  {
+    date: 'ABR 2026',
+    title: 'Publicação do regulamento',
+    desc: 'Decreto nº 12.955/2026 (CBS) e Resolução CGIBS nº 6/2026 (IBS) trazem as regras definitivas',
+    status: 'done',
+  },
+  {
+    date: 'JUN 2026',
+    title: 'Publicação da especificação do split payment',
+    desc: 'Início do desenvolvimento dos sistemas',
+    status: 'done',
+  },
+  {
+    title: 'Poucos meses antes do fim do PIS/Cofins e início da CBS',
+    status: 'current',
+  },
+  {
+    date: 'AGO 2026',
+    title: 'Início da aplicação de penalidades',
+    desc: 'Erros nos campos de IBS/CBS passam a gerar autuação e custo real',
+    status: 'future',
+  },
+  {
+    date: 'JAN 2027',
+    title: 'Fim do PIS/Cofins e início da CBS em alíquota cheia',
+    desc: 'Operação passa a seguir definitivamente o novo modelo tributário',
+    status: 'end',
+  },
+];
+---
+
+<section data-tl-wrap class="tl-section bg-canvas py-section">
+  <div class="mx-auto max-w-container px-gutter">
+    <div class="tl-grid">
+
+      <!-- ── Coluna esquerda: título + CTA (sticky no desktop) ── -->
+      <div class="tl-aside">
+        <h2 class="tl-heading font-display text-ink">
+          O tempo para se<br />preparar está acabando
+        </h2>
+        <a
+          href="#contato"
+          class="inline-flex self-start items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-11 rounded-md"
+          data-char-btn
+        >
+          Solicitar diagnóstico
+        </a>
+      </div>
+
+      <!-- ── Coluna direita: trilho + itens ── -->
+      <div class="tl-main">
+        <!-- Trilho -->
+        <div class="tl-rail" aria-hidden="true">
+          <div data-tl-fill class="tl-rail-fill"></div>
+        </div>
+
+        <!-- Itens -->
+        <ul class="tl-list">
+          {TIMELINE.map((item) => (
+            <li class="tl-item" data-tl-item data-status={item.status}>
+              <!-- Marcador -->
+              <span class="tl-marker" data-tl-marker data-status={item.status} aria-hidden="true">
+                {item.status === 'done' && (
+                  <svg class="tl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                )}
+                {item.status === 'current' && (
+                  <svg class="tl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg>
+                )}
+                {item.status === 'future' && (
+                  <svg class="tl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /></svg>
+                )}
+                {item.status === 'end' && (
+                  <svg class="tl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
+                )}
+              </span>
+
+              <!-- Conteúdo -->
+              {item.status === 'current' ? (
+                <div class="tl-card" data-tl-reveal>
+                  <p class="tl-card-eyebrow font-display" data-tl-stagger>VOCÊ ESTÁ AQUI</p>
+                  <p class="tl-card-title font-display" data-tl-stagger>{item.title}</p>
+                </div>
+              ) : (
+                <div class="tl-content">
+                  <p class="tl-date font-display" data-tl-stagger>{item.date}</p>
+                  <div class="tl-text">
+                    <p class="tl-title font-display" data-tl-stagger>{item.title}</p>
+                    {item.desc && <p class="tl-desc font-sans" data-tl-stagger>{item.desc}</p>}
+                  </div>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     LAYOUT BASE (mobile-first) — coluna única empilhada
+  ═══════════════════════════════════════════════════════════════════ */
+  .tl-grid {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  }
+
+  .tl-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .tl-heading {
+    font-weight: 400;
+    font-size: clamp(1.75rem, 1.34rem + 1.76vw, 3rem); /* 28→48px */
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: #231f23;
+  }
+
+  /* ── Coluna direita ── */
+  .tl-main {
+    position: relative;
+  }
+
+  /* Trilho vertical de 6px à esquerda da lista */
+  .tl-rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 6px;
+    background: #f0f0ea;
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .tl-rail-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-brand); /* #28492d */
+    border-radius: 100px;
+    transform: scaleY(var(--tl-progress, 0));
+    transform-origin: top center;
+  }
+
+  .tl-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* dá espaço à esquerda para o trilho + marcadores */
+    padding-left: 4rem;
+  }
+
+  /* ── Item ── */
+  .tl-item {
+    position: relative;
+    padding-block: clamp(1.75rem, 1.2rem + 2vw, 2.5rem); /* ~py-40 no desktop */
+  }
+
+  .tl-item + .tl-item {
+    border-top: 1px solid rgba(25, 24, 24, 0.16);
+  }
+
+  /* Marcador centralizado verticalmente, alinhado ao trilho (left:0) */
+  .tl-marker {
+    position: absolute;
+    top: 50%;
+    /* centro do trilho (3px) menos metade do marcador (14px) => -11px a partir de padding-left=4rem */
+    left: calc(-4rem + 3px);
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 4.667px;
+    flex-shrink: 0;
+    will-change: transform;
+  }
+
+  .tl-icon {
+    width: 18.667px;
+    height: 18.667px;
+  }
+
+  /* Estados do marcador */
+  .tl-marker[data-status='done'] {
+    background: #d9f3e3;
+    color: var(--color-brand);
+  }
+  .tl-marker[data-status='current'] {
+    width: 40px;
+    height: 40px;
+    border-radius: 6.667px;
+    background: #fbe8a5;
+    border: 4px solid #fff4cf;
+    color: #bf9100;
+  }
+  .tl-marker[data-status='current'] .tl-icon {
+    width: 26.667px;
+    height: 26.667px;
+  }
+  .tl-marker[data-status='future'] {
+    background: #f0f0ea;
+    color: #6e6e6e;
+  }
+  .tl-marker[data-status='end'] {
+    background: #6e6e6e;
+    color: #fcfcf6;
+  }
+
+  /* ── Conteúdo padrão (data + texto) ── */
+  .tl-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tl-date {
+    flex-shrink: 0;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-brand);
+  }
+
+  .tl-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tl-title {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    color: rgba(25, 24, 24, 0.88);
+  }
+
+  .tl-desc {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #231f23;
+  }
+
+  /* ── Card "Você está aqui" ── */
+  .tl-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #fff6d7;
+    border: 1px solid #bf9100;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  .tl-card-eyebrow {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #bf9100;
+  }
+
+  .tl-card-title {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    color: rgba(25, 24, 24, 0.88);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TABLET+ (≥48rem) — data e texto lado a lado
+  ═══════════════════════════════════════════════════════════════════ */
+  @media (min-width: 48rem) {
+    .tl-content {
+      flex-direction: row;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .tl-date {
+      width: 100px;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     DESKTOP (≥64rem) — esquerda sticky + grid 2 colunas
+  ═══════════════════════════════════════════════════════════════════ */
+  @media (min-width: 64rem) {
+    .tl-grid {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 80px;
+    }
+    .tl-aside {
+      width: 556px;
+      flex-shrink: 0;
+      position: sticky;
+      top: clamp(6rem, 18vh, 10rem);
+    }
+    .tl-main {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     ESTADO INICIAL DE ANIMAÇÃO — só quando há motion habilitado.
+     Sem JS / reduced-motion: tudo visível, fill estática.
+  ═══════════════════════════════════════════════════════════════════ */
+  @media (prefers-reduced-motion: no-preference) {
+    /* Estado inicial: blocos de texto borrados/deslocados; marcadores recuados.
+       Evita flash antes do JS assumir (GSAP sobrescreve no scroll). */
+    .js-tl-anim [data-tl-stagger] {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(8px);
+      will-change: transform, filter, opacity;
+    }
+    .js-tl-anim .tl-marker {
+      opacity: 0.35;
+      transform: translate(-50%, -50%) scale(0.5);
+      filter: blur(4px);
+      will-change: transform, filter, opacity;
+    }
+  }
+
+  /* Reduced-motion: fill preenchida até ~o ponto "você está aqui" */
+  @media (prefers-reduced-motion: reduce) {
+    .tl-rail-fill {
+      transform: scaleY(0.62);
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initTimeline() {
+    const wrap = document.querySelector<HTMLElement>('[data-tl-wrap]');
+    if (!wrap) return;
+
+    const rail = wrap.querySelector<HTMLElement>('.tl-rail');
+    const fill = wrap.querySelector<HTMLElement>('[data-tl-fill]');
+    const list = wrap.querySelector<HTMLElement>('.tl-list');
+    const items = Array.from(wrap.querySelectorAll<HTMLElement>('[data-tl-item]'));
+    const markers = Array.from(wrap.querySelectorAll<HTMLElement>('[data-tl-marker]'));
+    if (!rail || !fill || !list || !items.length) return;
+
+    // Sincroniza o ScrollTrigger com o smooth-scroll do Lenis (ordem garantida no init)
+    const lenis = (window as any).__lenis;
+    if (lenis) lenis.on('scroll', ScrollTrigger.update);
+
+    const mm = gsap.matchMedia();
+
+    const clamp = gsap.utils.clamp(0, 1);
+    const stagEls = Array.from(wrap.querySelectorAll<HTMLElement>('[data-tl-stagger]'));
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      // Estado inicial via CSS (sem flash antes do GSAP assumir)
+      wrap.classList.add('js-tl-anim');
+
+      const lit: boolean[] = new Array(markers.length).fill(false);
+      const pulses: gsap.core.Tween[] = [];
+
+      const popMarker = (m: HTMLElement) => {
+        gsap.fromTo(
+          m,
+          { scale: 0.5, autoAlpha: 0.35, filter: 'blur(4px)' },
+          {
+            scale: 1,
+            autoAlpha: 1,
+            filter: 'blur(0px)',
+            duration: 0.55,
+            ease: 'back.out(2)',
+            overwrite: true,
+            onComplete: () => {
+              // Marcador "você está aqui" pulsa continuamente para guiar o olhar
+              if (m.dataset.status === 'current') {
+                pulses.push(
+                  gsap.to(m, { scale: 1.08, duration: 1.1, ease: 'sine.inOut', yoyo: true, repeat: -1 })
+                );
+              }
+            },
+          }
+        );
+      };
+
+      // Atualização por geometria VIVA a cada tick de scroll — imune a ranges
+      // obsoletos (reflow de fontes, seções pinadas e imagens lazy acima).
+      // A ponta da linha verde fica ancorada à ÂNCORA (60% da viewport); o texto
+      // resolve o blur ao subir até a zona de leitura (stagger natural pela
+      // diferença de altura entre data/título/descrição); cada marcador "estoura"
+      // quando seu centro cruza a âncora — onde a linha o alcança.
+      // Âncora a 60% (não 50%) dá folga p/ os últimos itens completarem antes
+      // de a seção (mais alta que a viewport) sair pelo topo.
+      const update = () => {
+        const vh = window.innerHeight;
+        const anchor = vh * 0.6;
+
+        // Lê todos os rects primeiro (evita layout thrashing); writes são
+        // transform/opacity/filter (compositados), que não invalidam layout.
+        const railRect = rail.getBoundingClientRect();
+        const stagRects = stagEls.map((el) => el.getBoundingClientRect());
+        const markRects = markers.map((m) => m.getBoundingClientRect());
+
+        // Linha: preenche do topo até a âncora
+        const fillP = clamp((anchor - railRect.top) / (railRect.height || 1));
+        gsap.set(fill, { '--tl-progress': fillP });
+
+        // Texto: banda 90% → âncora (entra borrado, resolve ao subir)
+        const bStart = vh * 0.9;
+        const bEnd = anchor;
+        for (let i = 0; i < stagEls.length; i++) {
+          const p = clamp((bStart - stagRects[i].top) / (bStart - bEnd));
+          gsap.set(stagEls[i], {
+            autoAlpha: p,
+            y: 28 * (1 - p),
+            filter: `blur(${(8 * (1 - p)).toFixed(2)}px)`,
+          });
+        }
+
+        // Marcadores: estouram quando o centro cruza a âncora (latch)
+        for (let i = 0; i < markers.length; i++) {
+          if (!lit[i] && markRects[i].top + markRects[i].height / 2 <= anchor) {
+            lit[i] = true;
+            popMarker(markers[i]);
+          }
+        }
+      };
+
+      // Garante estado final 100% completo, mesmo se uma rolagem rápida pular
+      // o cruzamento exato e o trigger encerrar (evita congelar pela metade).
+      const forceComplete = () => {
+        gsap.set(fill, { '--tl-progress': 1 });
+        gsap.set(stagEls, { autoAlpha: 1, y: 0, filter: 'blur(0px)' });
+        for (let i = 0; i < markers.length; i++) {
+          if (!lit[i]) {
+            lit[i] = true;
+            popMarker(markers[i]);
+          }
+        }
+      };
+
+      // Volta ao estado inicial (rolagem de volta acima da seção)
+      const forceReset = () => {
+        pulses.forEach((t) => t.kill());
+        pulses.length = 0;
+        lit.fill(false);
+        gsap.set(fill, { '--tl-progress': 0 });
+        gsap.set(stagEls, { autoAlpha: 0, y: 28, filter: 'blur(8px)' });
+        gsap.set(markers, { scale: 0.5, autoAlpha: 0.35, filter: 'blur(4px)' });
+      };
+
+      const st = ScrollTrigger.create({
+        trigger: wrap,
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: update,
+        onRefresh: update,
+        onLeave: forceComplete,
+        onLeaveBack: forceReset,
+      });
+
+      update();
+
+      return () => {
+        wrap.classList.remove('js-tl-anim');
+        pulses.forEach((t) => t.kill());
+        st.kill();
+        gsap.set(stagEls, { clearProps: 'all' });
+        gsap.set(markers, { clearProps: 'all' });
+        gsap.set(fill, { clearProps: 'all' });
+      };
+    });
+
+    // Recalcula posições quando fontes/recursos terminam de carregar
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTimeline);
+  } else {
+    initTimeline();
+  }
+</script>
