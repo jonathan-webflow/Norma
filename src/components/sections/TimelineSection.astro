@@ -392,16 +392,30 @@ const TIMELINE: TimelineItem[] = [
     const wrap = document.querySelector<HTMLElement>('[data-tl-wrap]');
     if (!wrap) return;
 
+    const main = wrap.querySelector<HTMLElement>('.tl-main');
     const rail = wrap.querySelector<HTMLElement>('.tl-rail');
     const fill = wrap.querySelector<HTMLElement>('[data-tl-fill]');
     const list = wrap.querySelector<HTMLElement>('.tl-list');
     const items = Array.from(wrap.querySelectorAll<HTMLElement>('[data-tl-item]'));
     const markers = Array.from(wrap.querySelectorAll<HTMLElement>('[data-tl-marker]'));
-    if (!rail || !fill || !list || !items.length) return;
+    if (!main || !rail || !fill || !list || !items.length) return;
 
     // Sincroniza o ScrollTrigger com o smooth-scroll do Lenis (ordem garantida no init)
     const lenis = (window as any).__lenis;
     if (lenis) lenis.on('scroll', ScrollTrigger.update);
+
+    // Trilho termina no CENTRO do último marcador (bandeira JAN 2027), não no fundo
+    // de .tl-main. Vale p/ todos (inclui reduced-motion). Encurtar o trilho também
+    // alinha o fillP=1 exatamente a quando a bandeira cruza a âncora (60% vh).
+    const lastMarker = markers[markers.length - 1];
+    const measureRail = () => {
+      const lm = lastMarker.getBoundingClientRect();
+      const mr = main.getBoundingClientRect();
+      rail.style.bottom = 'auto';
+      rail.style.height = `${lm.top + lm.height / 2 - mr.top}px`;
+    };
+    measureRail();
+    ScrollTrigger.addEventListener('refresh', measureRail);
 
     const mm = gsap.matchMedia();
 
@@ -446,8 +460,46 @@ const TIMELINE: TimelineItem[] = [
       // quando seu centro cruza a âncora — onde a linha o alcança.
       // Âncora a 60% (não 50%) dá folga p/ os últimos itens completarem antes
       // de a seção (mais alta que a viewport) sair pelo topo.
+      let done = false; // true quando a seção saiu inteira por cima (estado final fixado)
+
+      // Seção totalmente acima da viewport ⇒ tudo já completou naturalmente.
+      // gsap.set instantâneo (sem "pop"), pois está fora de tela — sem salto visível.
+      const completeState = () => {
+        gsap.set(fill, { '--tl-progress': 1 });
+        gsap.set(stagEls, { autoAlpha: 1, y: 0, filter: 'blur(0px)' });
+        gsap.set(markers, { scale: 1, autoAlpha: 1, filter: 'blur(0px)' });
+        lit.fill(true);
+      };
+
+      // Seção totalmente abaixo da viewport (rolou de volta acima) ⇒ estado inicial,
+      // para a próxima descida re-animar do zero.
+      const resetState = () => {
+        pulses.forEach((t) => t.kill());
+        pulses.length = 0;
+        lit.fill(false);
+        gsap.set(fill, { '--tl-progress': 0 });
+        gsap.set(stagEls, { autoAlpha: 0, y: 28, filter: 'blur(8px)' });
+        gsap.set(markers, { scale: 0.5, autoAlpha: 0.35, filter: 'blur(4px)' });
+      };
+
       const update = () => {
         const vh = window.innerHeight;
+        const wrapRect = wrap.getBoundingClientRect();
+
+        // ── Estados terminais por POSIÇÃO (contínuos, não por callback de borda) ──
+        if (wrapRect.top >= vh) {
+          // Seção abaixo da viewport: reseta (só se algo foi aceso)
+          if (lit.some(Boolean) || done) { resetState(); done = false; }
+          return;
+        }
+        if (wrapRect.bottom <= 0) {
+          // Seção acima da viewport: fixa estado final uma vez
+          if (!done) { completeState(); done = true; }
+          return;
+        }
+        done = false;
+
+        // ── Seção visível: geometria viva, suave (sem nenhum override) ──
         const anchor = vh * 0.6;
 
         // Lê todos os rects primeiro (evita layout thrashing); writes são
@@ -456,7 +508,7 @@ const TIMELINE: TimelineItem[] = [
         const stagRects = stagEls.map((el) => el.getBoundingClientRect());
         const markRects = markers.map((m) => m.getBoundingClientRect());
 
-        // Linha: preenche do topo até a âncora
+        // Linha: preenche do topo até a âncora (fillP=1 ⇔ bandeira na âncora)
         const fillP = clamp((anchor - railRect.top) / (railRect.height || 1));
         gsap.set(fill, { '--tl-progress': fillP });
 
@@ -481,43 +533,24 @@ const TIMELINE: TimelineItem[] = [
         }
       };
 
-      // Garante estado final 100% completo, mesmo se uma rolagem rápida pular
-      // o cruzamento exato e o trigger encerrar (evita congelar pela metade).
-      const forceComplete = () => {
-        gsap.set(fill, { '--tl-progress': 1 });
-        gsap.set(stagEls, { autoAlpha: 1, y: 0, filter: 'blur(0px)' });
-        for (let i = 0; i < markers.length; i++) {
-          if (!lit[i]) {
-            lit[i] = true;
-            popMarker(markers[i]);
-          }
-        }
-      };
-
-      // Volta ao estado inicial (rolagem de volta acima da seção)
-      const forceReset = () => {
-        pulses.forEach((t) => t.kill());
-        pulses.length = 0;
-        lit.fill(false);
-        gsap.set(fill, { '--tl-progress': 0 });
-        gsap.set(stagEls, { autoAlpha: 0, y: 28, filter: 'blur(8px)' });
-        gsap.set(markers, { scale: 0.5, autoAlpha: 0.35, filter: 'blur(4px)' });
-      };
+      // update() roda em TODO frame (rAF do gsap.ticker), não só na faixa ativa do
+      // trigger — garante progressão contínua mesmo além do `end` (que pode estar
+      // obsoleto por seções pinadas/reflow de fontes). Os returns por posição
+      // (seção fora de tela) mantêm o custo mínimo quando longe da seção.
+      gsap.ticker.add(update);
 
       const st = ScrollTrigger.create({
         trigger: wrap,
         start: 'top bottom',
         end: 'bottom top',
-        onUpdate: update,
         onRefresh: update,
-        onLeave: forceComplete,
-        onLeaveBack: forceReset,
       });
 
       update();
 
       return () => {
         wrap.classList.remove('js-tl-anim');
+        gsap.ticker.remove(update);
         pulses.forEach((t) => t.kill());
         st.kill();
         gsap.set(stagEls, { clearProps: 'all' });
