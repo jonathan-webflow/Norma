@@ -78,5 +78,10 @@ const { title, description = '' } = Astro.props;
         requestAnimationFrame(raf);
       }
     </script>
+
+    <!-- Reveal animations (scroll-driven blur+fade+stagger) — após Lenis para sync correto -->
+    <script>
+      import '../scripts/reveal-animations';
+    </script>
   </body>
 </html>
