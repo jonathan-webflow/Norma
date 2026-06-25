@@ -445,70 +445,18 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     const count = Math.min(visualWraps.length, items.length);
     if (count < 1) return;
 
-    const rm       = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const DURATION = rm ? 0.01 : 0.75;
-    const EASE     = 'power4.inOut';
-    const SCROLL_AMOUNT = 0.9;
+    const EASE = 'power4.inOut';
 
     const getTexts = (el: HTMLElement) =>
       Array.from(el.querySelectorAll<HTMLElement>('[data-omuda-text]'));
 
-    // Nav: primeiro step ativo (o HTML já tem data-active, mas reforçamos)
     navSteps[0]?.setAttribute('data-active', '');
 
-    let currentIndex = 0;
-
-    // Alterna o estado ativo no nav esquerdo (via CSS transition: color)
     function setActiveNav(toIdx: number) {
       navSteps.forEach((el, i) => {
         if (i === toIdx) el.setAttribute('data-active', '');
         else el.removeAttribute('data-active');
       });
-    }
-
-    // ── Animações de transição dos bullets ───────────────────────────
-    function animateOut(itemEl: HTMLElement) {
-      const texts = getTexts(itemEl);
-      gsap.to(texts, {
-        autoAlpha: 0,
-        y: -30,
-        ease: 'power4.out',
-        duration: 0.4,
-        onComplete: () => gsap.set(itemEl, { autoAlpha: 0 }),
-      });
-    }
-
-    function animateIn(itemEl: HTMLElement) {
-      const texts = getTexts(itemEl);
-      gsap.set(itemEl, { autoAlpha: 1 });
-      gsap.fromTo(
-        texts,
-        { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, ease: 'power4.out', duration: DURATION, stagger: 0.08 }
-      );
-    }
-
-    function transition(fromIndex: number, toIndex: number) {
-      if (fromIndex === toIndex) return;
-      const tl = gsap.timeline({ defaults: { overwrite: 'auto' } });
-
-      if (fromIndex < toIndex) {
-        tl.to(visualWraps[toIndex], {
-          clipPath: 'inset(0% round 0.75em)',
-          duration: DURATION,
-          ease: EASE,
-        }, 0);
-      } else {
-        tl.to(visualWraps[fromIndex], {
-          clipPath: 'inset(50% round 0.75em)',
-          duration: DURATION,
-          ease: EASE,
-        }, 0);
-      }
-
-      animateOut(items[fromIndex]);
-      animateIn(items[toIndex]);
-      setActiveNav(toIndex);
     }
 
     const steps = Math.max(1, count - 1);
@@ -517,31 +465,51 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
     mm.add(
       '(min-width: 64rem) and (prefers-reduced-motion: no-preference)',
       () => {
-        // Estado inicial do clip-path: apenas no desktop (matchMedia reverte ao sair)
+        // Estados iniciais
         gsap.set(visualWraps[0], { clipPath: 'inset(0% round 0.75em)' });
         gsap.set(items[0], { autoAlpha: 1 });
         visualWraps.slice(1).forEach(v =>
           gsap.set(v, { clipPath: 'inset(50% round 0.75em)' })
         );
+        items.slice(1).forEach(item => gsap.set(item, { autoAlpha: 0 }));
 
-        ScrollTrigger.create({
-          trigger: wrap,
-          start: 'center center',
-          end: () => `+=${steps * 100}%`,
-          pin: true,
-          scrub: true,
-          invalidateOnRefresh: true,
-          onUpdate: self => {
-            const p   = Math.min(self.progress, SCROLL_AMOUNT) / SCROLL_AMOUNT;
-            let   idx = Math.floor(p * steps + 1e-6);
-            idx = Math.max(0, Math.min(steps, idx));
-
-            if (idx !== currentIndex) {
-              transition(currentIndex, idx);
-              currentIndex = idx;
-            }
+        // Timeline 100% scrub-driven
+        // Estrutura (10 unidades = 100% do scroll):
+        //   t=0→3 (30%): hold 01 — sem animação
+        //   t=3→7 (40%): transição clip-path + bullets
+        //   t=7→10 (30%): hold 02 — sem animação
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: wrap,
+            start: 'center center',
+            end: () => `+=${steps * 100}%`,
+            pin: true,
+            scrub: true,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              setActiveNav(self.progress >= 0.35 ? 1 : 0);
+            },
           },
         });
+
+        // Clip-path: visual 02 abre (t=3 → t=7)
+        tl.to(visualWraps[1], { clipPath: 'inset(0% round 0.75em)', duration: 4, ease: EASE }, 3);
+
+        // Bullets 01 saem (t=3 → t=5)
+        tl.to(getTexts(items[0]), { autoAlpha: 0, y: -20, duration: 2, ease: 'power3.out' }, 3);
+        tl.set(items[0], { autoAlpha: 0 }, 5);
+
+        // Bullets 02 entram (t=4.5 → t=7)
+        tl.set(items[1], { autoAlpha: 1 }, 4.5);
+        tl.fromTo(
+          getTexts(items[1]),
+          { autoAlpha: 0, y: 20, immediateRender: false },
+          { autoAlpha: 1, y: 0, duration: 2.5, ease: 'power3.out', stagger: 0.15 },
+          4.5
+        );
+
+        // Hold 02: tween vazio t=7→t=10 para estender a timeline
+        tl.to({}, { duration: 3 }, 7);
       }
     );
   }
