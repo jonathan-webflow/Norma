@@ -4,9 +4,21 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  canonicalUrl?: string;
 }
 
-const { title, description = '' } = Astro.props;
+const {
+  title,
+  description = 'Concilie a apuração do fisco, monitore e recolha os impostos dos fornecedores para garantir seus créditos e reduzir risco de autuação.',
+  ogImage = '/og-norma.png',
+  canonicalUrl,
+} = Astro.props;
+
+const siteUrl = Astro.url.origin;
+const canonical = canonicalUrl ?? Astro.url.href;
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+const ogTitle = `${title} — Norma`;
 ---
 
 <!doctype html>
@@ -14,11 +26,39 @@ const { title, description = '' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonical} />
+
+    <!-- SEO básico -->
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Norma" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={description} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Favicon — adapta ao tema do sistema (light/dark) -->
+    <link rel="icon" href="/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.ico" />
+
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{ogTitle}</title>
     <!-- Google Fonts: Stack Sans Headline (headings) + Inter (sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
