@@ -11,7 +11,7 @@ interface Props {
 const {
   title,
   description = 'Concilie a apuração do fisco, monitore e recolha os impostos dos fornecedores para garantir seus créditos e reduzir risco de autuação.',
-  ogImage = '/og-norma.png',
+  ogImage = '/OpenGraph-Img.png',
   canonicalUrl,
 } = Astro.props;
 
@@ -55,7 +55,6 @@ const ogTitle = `${title} — Norma`;
     <!-- Favicon — adapta ao tema do sistema (light/dark) -->
     <link rel="icon" href="/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
     <link rel="icon" href="/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
-    <link rel="icon" href="/favicon.ico" />
 
     <meta name="generator" content={Astro.generator} />
     <title>{ogTitle}</title>
