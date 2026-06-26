@@ -40,14 +40,15 @@ const NAV_COLUMNS = [
   O conteúdo fica em position:fixed (atrás do <main z-[1]>), revelado conforme o main sobe.
 -->
 <footer
+  data-footer-spacer
   class="relative overflow-hidden"
-  style="--fh: min(680px, 100svh); height: var(--fh);"
+  style="--fh: min(100svh, 50rem); height: var(--fh);"
 >
 
-  <!-- Conteúdo: fixo ao bottom, mesma altura do spacer -->
+  <!-- Conteúdo: fixo ao bottom; altura definida pelo próprio conteúdo (medida via JS → --fh) -->
   <div
+    data-footer-inner
     class="fixed bottom-0 left-0 right-0 overflow-hidden bg-brand"
-    style="height: var(--fh);"
   >
     <div class="mx-auto max-w-container px-gutter">
 
@@ -137,3 +138,17 @@ const NAV_COLUMNS = [
     </div>
   </div>
 </footer>
+
+<script>
+  // Sincroniza a altura do spacer (--fh) com a altura real do conteúdo fixo.
+  // Garante que o footer ocupe exatamente o conteúdo em qualquer largura — sem
+  // espaço vazio no desktop nem corte no mobile. Reage a resize/reflow de fonte.
+  const inner = document.querySelector<HTMLElement>('[data-footer-inner]');
+  const spacer = document.querySelector<HTMLElement>('[data-footer-spacer]');
+
+  if (inner && spacer) {
+    const sync = () => spacer.style.setProperty('--fh', `${inner.offsetHeight}px`);
+    sync();
+    new ResizeObserver(sync).observe(inner);
+  }
+</script>
