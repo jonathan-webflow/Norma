@@ -192,8 +192,14 @@ import govImg    from '../../assets/images/tiles/omuda-gov-icon.png';
   /* Cabeçalho mobile (número + título por step) */
   .step-mobile-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 1.25rem;
+  }
+
+  /* Coluna fixa para 01/02 alinharem o título na mesma posição */
+  .step-mobile-header .step-num {
+    min-width: 1.15em;
+    font-variant-numeric: tabular-nums;
   }
 
   /* Tipografia compartilhada (mobile + nav desktop) */

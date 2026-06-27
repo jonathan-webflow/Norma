@@ -1,7 +1,7 @@
 ---
-// Features com sticky-stack: cada bloco prende no topo (≥lg) e o próximo
-// desliza por cima (z-index crescente + fundo opaco). GSAP faz só um scrub
-// sutil no card visual ao entrar. Conteúdo e visuais do Figma (node 858:1017).
+// Features com sticky-stack: cada bloco prende no topo e o próximo desliza
+// por cima (z-index crescente + fundo opaco). GSAP faz só um scrub sutil no
+// card visual ao entrar. Conteúdo e visuais do Figma (node 858:1017).
 import { Image } from 'astro:assets';
 import splitPayment from '../../assets/images/tiles/split-payment.png';
 import auditoria from '../../assets/images/tiles/auditoria.png';
@@ -49,12 +49,12 @@ const TILES = [
 
 <section class="bg-canvas py-section">
   <div class="mx-auto max-w-container px-gutter">
-    <div class="flex flex-col gap-[clamp(4rem,2rem+8vw,10rem)]">
+    <div class="tile-stack flex flex-col">
 
       {TILES.map((tile, i) => (
         <article
           data-tile
-          class="tile bg-canvas border-t border-[#d2d2d2] pt-8 lg:pt-[clamp(1.5rem,0.7rem+2.1vw,3.5rem)] lg:sticky"
+          class="tile sticky bg-canvas border-t border-[#d2d2d2] pt-8 lg:pt-[clamp(1.5rem,0.7rem+2.1vw,3.5rem)]"
           style={`z-index:${i + 1};`}
         >
           <div class="flex flex-col lg:flex-row lg:items-end gap-[clamp(2rem,1rem+4vw,5rem)]">
@@ -113,7 +113,34 @@ const TILES = [
 </section>
 
 <style>
-  /* Sticky-stack só no desktop (≥64rem). Mobile/tablet = blocos estáticos. */
+  /* Gap menor no mobile/tablet para intensificar o overlap do stack */
+  .tile-stack {
+    gap: 2rem;
+  }
+
+  @media (min-width: 48rem) and (max-width: 63.999rem) {
+    .tile-stack {
+      gap: 3rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .tile-stack {
+      gap: clamp(4rem, 2rem + 8vw, 10rem);
+    }
+  }
+
+  /* Sticky-stack em todos os breakpoints */
+  .tile {
+    top: 0.75rem;
+  }
+
+  @media (min-width: 48rem) {
+    .tile {
+      top: 0.875rem;
+    }
+  }
+
   @media (min-width: 64rem) {
     .tile {
       top: clamp(1rem, 0.5rem + 1vw, 1.5rem);
@@ -138,9 +165,9 @@ const TILES = [
   const lenis = (window as any).__lenis;
   if (lenis) lenis.on('scroll', ScrollTrigger.update);
 
-  // Scrub sutil do card visual — só desktop e sem reduced-motion
+  // Scrub sutil do card visual — todos os breakpoints, exceto reduced-motion
   const mm = gsap.matchMedia();
-  mm.add('(min-width: 64rem) and (prefers-reduced-motion: no-preference)', () => {
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
     const tiles = document.querySelectorAll<HTMLElement>('[data-tile]');
     tiles.forEach((tile) => {
       const visual = tile.querySelector<HTMLElement>('[data-tile-visual]');
