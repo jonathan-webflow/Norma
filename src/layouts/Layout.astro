@@ -53,8 +53,44 @@ const ogTitle = `${title} — Norma`;
     <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Favicon — adapta ao tema do sistema (light/dark) -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
     <link rel="icon" href="/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
+
+    <!-- Dados estruturados -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Norma",
+          "legalName": "SIGMA LABS TECNOLOGIA DA INFORMACAO LTDA",
+          "url": "https://norma.com.br",
+          "logo": "https://norma.com.br/images/norma-logo-light.svg",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "sales",
+            "url": "https://api.whatsapp.com/send/?phone=5511963028243"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Alameda Rio Claro, 241",
+            "addressLocality": "São Paulo",
+            "addressRegion": "SP",
+            "postalCode": "01332-010",
+            "addressCountry": "BR"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Norma",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "description": "Plataforma de conciliação tributária para IBS/CBS e Reforma Tributária",
+          "url": "https://norma.com.br"
+        }
+      ]
+    })} />
 
     <meta name="generator" content={Astro.generator} />
     <title>{ogTitle}</title>
