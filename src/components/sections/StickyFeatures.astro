@@ -6,6 +6,7 @@ import { Image } from 'astro:assets';
 import splitPayment from '../../assets/images/tiles/split-payment.png';
 import auditoria from '../../assets/images/tiles/auditoria.png';
 import fornecedores from '../../assets/images/tiles/fornecedores.png';
+import { WHATSAPP_URL } from '../../config/links';
 
 const TILES = [
   {
@@ -80,8 +81,10 @@ const TILES = [
                   ))}
                 </div>
                 <a
-                  href="#contato"
-                  class="inline-flex self-start items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-12 rounded-md"
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex self-start items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-12 rounded-md cursor-pointer"
                   data-char-btn
                 >
                   Fale conosco

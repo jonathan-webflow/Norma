@@ -1,3 +1,7 @@
+---
+import { WHATSAPP_URL } from '../../config/links';
+---
+
 <section class="bg-canvas py-section">
   <div class="mx-auto max-w-container px-4">
 
@@ -22,8 +26,10 @@
           </p>
 
           <a
-            href="#contato"
-            class="inline-flex items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-8 h-12 rounded-md"
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-8 h-12 rounded-md cursor-pointer"
             data-char-btn
           >
             Solicitar diagnóstico

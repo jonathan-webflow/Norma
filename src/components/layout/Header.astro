@@ -1,4 +1,5 @@
 ---
+import { WHATSAPP_URL } from '../../config/links';
 ---
 
 <header class="relative z-2 bg-canvas border-b border-border">
@@ -18,8 +19,10 @@
       </a>
 
       <a
-        href="#contato"
-        class="inline-flex items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-12 rounded-md"
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-12 rounded-md cursor-pointer"
         data-char-btn
       >
         Fale conosco

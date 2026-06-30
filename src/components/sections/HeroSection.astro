@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import heroDashboard from '../../assets/images/hero-dashboard.png';
+import { WHATSAPP_URL } from '../../config/links';
 ---
 
 <section class="bg-canvas">
@@ -24,8 +25,10 @@ import heroDashboard from '../../assets/images/hero-dashboard.png';
 
         <div>
           <a
-            href="#"
-            class="inline-flex items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-12 rounded-md"
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-12 rounded-md cursor-pointer"
             data-char-btn
           >
             Conheça a solução

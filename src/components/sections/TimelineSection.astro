@@ -4,6 +4,8 @@
 // Layout 2 colunas: esquerda sticky (título + CTA) | direita trilho + itens.
 // Animação de scroll: linha de progresso verde (scrub), "pop" dos marcadores e reveal dos itens.
 
+import { WHATSAPP_URL } from '../../config/links';
+
 type Status = 'done' | 'current' | 'future' | 'end';
 
 interface TimelineItem {
@@ -73,8 +75,10 @@ const TIMELINE: TimelineItem[] = [
           O tempo para se<br />preparar está acabando
         </h2>
         <a
-          href="#contato"
-          class="inline-flex self-start items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-11 rounded-md"
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex self-start items-center justify-center bg-brand-dark text-ink-inverse font-display text-[1rem] tracking-[0.125em] whitespace-nowrap px-6 h-11 rounded-md cursor-pointer"
           data-char-btn
         >
           Solicitar diagnóstico
